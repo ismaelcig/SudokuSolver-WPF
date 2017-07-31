@@ -1,0 +1,17 @@
+c:\users\ismaelci\documents\visual studio 2017\Projects\SudokuSolver\SudokuSolver\bin\Debug\SudokuSolver.exe.config
+c:\users\ismaelci\documents\visual studio 2017\Projects\SudokuSolver\SudokuSolver\bin\Debug\SudokuSolver.exe
+c:\users\ismaelci\documents\visual studio 2017\Projects\SudokuSolver\SudokuSolver\bin\Debug\SudokuSolver.pdb
+c:\users\ismaelci\documents\visual studio 2017\Projects\SudokuSolver\SudokuSolver\obj\Debug\SudokuSolver.csprojResolveAssemblyReference.cache
+c:\users\ismaelci\documents\visual studio 2017\Projects\SudokuSolver\SudokuSolver\obj\Debug\Cell.g.cs
+c:\users\ismaelci\documents\visual studio 2017\Projects\SudokuSolver\SudokuSolver\obj\Debug\MainWindow.g.cs
+c:\users\ismaelci\documents\visual studio 2017\Projects\SudokuSolver\SudokuSolver\obj\Debug\App.g.cs
+c:\users\ismaelci\documents\visual studio 2017\Projects\SudokuSolver\SudokuSolver\obj\Debug\SudokuSolver_MarkupCompile.cache
+c:\users\ismaelci\documents\visual studio 2017\Projects\SudokuSolver\SudokuSolver\obj\Debug\SudokuSolver_MarkupCompile.lref
+c:\users\ismaelci\documents\visual studio 2017\Projects\SudokuSolver\SudokuSolver\obj\Debug\Cell.baml
+c:\users\ismaelci\documents\visual studio 2017\Projects\SudokuSolver\SudokuSolver\obj\Debug\MainWindow.baml
+c:\users\ismaelci\documents\visual studio 2017\Projects\SudokuSolver\SudokuSolver\obj\Debug\SudokuSolver.g.resources
+c:\users\ismaelci\documents\visual studio 2017\Projects\SudokuSolver\SudokuSolver\obj\Debug\SudokuSolver.Properties.Resources.resources
+c:\users\ismaelci\documents\visual studio 2017\Projects\SudokuSolver\SudokuSolver\obj\Debug\SudokuSolver.csproj.GenerateResource.Cache
+c:\users\ismaelci\documents\visual studio 2017\Projects\SudokuSolver\SudokuSolver\obj\Debug\SudokuSolver.exe
+c:\users\ismaelci\documents\visual studio 2017\Projects\SudokuSolver\SudokuSolver\obj\Debug\SudokuSolver.pdb
+c:\users\ismaelci\documents\visual studio 2017\Projects\SudokuSolver\SudokuSolver\obj\Debug\GeneratedInternalTypeHelper.g.cs
