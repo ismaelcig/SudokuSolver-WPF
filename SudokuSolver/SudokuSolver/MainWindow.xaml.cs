@@ -125,9 +125,179 @@ namespace SudokuSolver
             }
             //TODO: Comprobar que el Sudoku es válido
 
-            t = new Thread(Solve);
-            t.Start();
+            //t = new Thread(Solve);
+            //t.Start();
             //Mientras no lo haya resuelto, intenta llegar a una solución
+            bool solved = false;
+            while (!solved)
+            {
+                #region Rows
+                for (int i = 0; i < 9; i++)
+                {
+                    for (int j = 0; j < 9; j++)
+                    {
+                        selectedCell = cellsArray[i, j];
+                        if (selectedCell.Fixed || selectedCell.Solved)
+                        {//Una celda fija
+                            if (!Descartes.Contains(selectedCell.Num))
+                            {
+                                Descartes.Add(selectedCell.Num);
+                                somethingChanged = true;
+                            }
+                        }
+                        else
+                        {//Es una celda no fija
+                            if (selectedCell.Num > 0)
+                            {//Tiene un nº
+                                if (!Descartes.Contains(selectedCell.Num))
+                                {
+                                    Descartes.Add(selectedCell.Num);
+                                    somethingChanged = true;
+                                }
+                            }
+                            else
+                            {//Hay que hallar el nº
+                                foreach (int n in Descartes)
+                                {//Quita los descartes de la lista de posibilidades
+                                    if (selectedCell.Possible.Contains(n))
+                                    {
+                                        selectedCell.Possible.Remove(n);
+                                        somethingChanged = true;
+                                    }
+                                }
+                                if (selectedCell.Possible.Count == 1)
+                                {
+                                    aux = selectedCell.Possible[0];
+                                    somethingChanged = true;
+                                }
+                            }
+                        }
+                        Dispatcher.Invoke(ui);
+                    }
+                    if (somethingChanged)
+                    {//Si algo ha cambiado, vuelve a recorrer la fila
+                        i--;
+                        somethingChanged = false;
+                    }
+                    else
+                    {
+                        Descartes = new HashSet<int>();
+                    }
+                }
+                #endregion
+                #region Columns
+                for (int i = 0; i < 9; i++)
+                {
+                    for (int j = 0; j < 9; j++)
+                    {
+                        selectedCell = cellsArray[j, i];
+                        if (selectedCell.Fixed || selectedCell.Solved)
+                        {//Una celda fija
+                            if (!Descartes.Contains(selectedCell.Num))
+                            {
+                                Descartes.Add(selectedCell.Num);
+                                somethingChanged = true;
+                            }
+                        }
+                        else
+                        {//Es una celda no fija
+                            if (selectedCell.Num > 0)
+                            {//Tiene un nº
+                                if (!Descartes.Contains(selectedCell.Num))
+                                {
+                                    Descartes.Add(selectedCell.Num);
+                                    somethingChanged = true;
+                                }
+                            }
+                            else
+                            {//Hay que hallar el nº
+                                foreach (int n in Descartes)
+                                {//Quita los descartes de la lista de posibilidades
+                                    if (selectedCell.Possible.Contains(n))
+                                    {
+                                        selectedCell.Possible.Remove(n);
+                                        somethingChanged = true;
+                                    }
+                                }
+                                if (selectedCell.Possible.Count == 1)
+                                {
+                                    aux = selectedCell.Possible[0];
+                                    somethingChanged = true;
+                                }
+                            }
+                        }
+                        Dispatcher.Invoke(ui);
+                    }
+                    if (somethingChanged)
+                    {//Si algo ha cambiado, vuelve a recorrer la columna
+                        i--;
+                        somethingChanged = false;
+                    }
+                    else
+                    {
+                        Descartes = new HashSet<int>();
+                    }
+                }
+                #endregion
+                #region Boxes
+                foreach (Cell[,] item in arrays)
+                {
+                    Descartes = new HashSet<int>();
+                    do
+                    {
+                        somethingChanged = false;
+                        for (int i = 0; i < 3; i++)
+                        {
+                            for (int j = 0; j < 3; j++)
+                            {
+                                selectedCell = item[i, j];
+                                if (selectedCell.Fixed || selectedCell.Solved)
+                                {//Una celda fija
+                                    if (!Descartes.Contains(selectedCell.Num))
+                                    {
+                                        Descartes.Add(selectedCell.Num);
+                                        somethingChanged = true;
+                                    }
+                                }
+                                else
+                                {//Es una celda no fija
+                                    if (selectedCell.Num > 0)
+                                    {//Tiene un nº
+                                        if (!Descartes.Contains(selectedCell.Num))
+                                        {
+                                            Descartes.Add(selectedCell.Num);
+                                            somethingChanged = true;
+                                        }
+                                    }
+                                    else
+                                    {//Hay que hallar el nº
+                                        foreach (int n in Descartes)
+                                        {//Quita los descartes de la lista de posibilidades
+                                            if (selectedCell.Possible.Contains(n))
+                                            {
+                                                selectedCell.Possible.Remove(n);
+                                                somethingChanged = true;
+                                            }
+                                        }
+                                        if (selectedCell.Possible.Count == 1)
+                                        {
+                                            aux = selectedCell.Possible[0];
+                                            somethingChanged = true;
+                                        }
+                                    }
+                                }
+                                Dispatcher.Invoke(ui);
+                            }
+                        }
+                    } while (somethingChanged);
+                }
+                #endregion
+                var result = MessageBox.Show("Keep finding solution?", "", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.No)
+                {
+                    solved = true;
+                }
+            }
         }
 
         void Solve()
@@ -304,12 +474,13 @@ namespace SudokuSolver
 
         private void buttClean_Click(object sender, RoutedEventArgs e)
         {
-            //Console.WriteLine(t.IsAlive);
-            foreach (Cell item in cellsArray)
-            {
-                item.Reset();
-            }
-            ResetSudoku();
+            //ResetSudoku();
+            //foreach (Cell item in cellsArray)
+            //{
+            //    item.Reset();
+            //}
+            System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
+            Application.Current.Shutdown();
         }
 
         private void button_Click(object sender, RoutedEventArgs e)
@@ -448,13 +619,11 @@ namespace SudokuSolver
             array33[2, 2] = cell88;
             #endregion
             //Save every cell
-            //cells = new List<Cell>();
             cellsArray = new Cell[9, 9];
             int contCol = 0;
             int contRow = 0;
             foreach (Cell item in g.Children)
             {
-                //cells.Add(item);
                 //Save in array
                 cellsArray[contRow, contCol] = item;
                 contCol++;

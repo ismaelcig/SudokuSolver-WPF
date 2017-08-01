@@ -151,7 +151,7 @@
 
         <Button x:Name="buttSolve" Content="Solve" HorizontalAlignment="Left" Margin="32,539,0,0" VerticalAlignment="Top" Width="76" Click="buttSolve_Click"/>
         <Button x:Name="buttClean" Content="Clean" HorizontalAlignment="Left" Margin="189,539,0,0" VerticalAlignment="Top" Width="75" Click="buttClean_Click"/>
-        <Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="432,0,0,549" VerticalAlignment="Bottom" Width="75" Click="button_Click"/>
+        <Button x:Name="button" Content="Fill" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Top" Width="27" Click="button_Click"/>
 
     </Grid>
 </Window>
