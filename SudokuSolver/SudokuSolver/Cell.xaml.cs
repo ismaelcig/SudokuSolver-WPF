@@ -20,35 +20,100 @@ namespace SudokuSolver
     /// </summary>
     public partial class Cell : UserControl
     {
-        public bool selected = false;
+        //Declarations
+        public int Num;
+        public bool Fixed = false;
+        public bool Solved = false;
+        public List<int> Possible;
+        public bool selected;
+
         public Cell()
         {
             InitializeComponent();
+            Reset();
+        }
+
+        public void Reset()
+        {
             lbl.Content = "";
+            Num = -1;
+            Unfix();
+            Possible = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            selected = false;
         }
 
         public void SelectionChanged()
-        {
-            if (selected)
+        {//Change color when selected/deselected
+            if (!Fixed && !Solved)
             {
-                grid.Background = Brushes.Bisque;
-            }
-            else
-            {
-                grid.Background = Brushes.White;
+                if (selected)
+                {
+                    grid.Background = Brushes.Bisque;
+                }
+                else
+                {
+                    grid.Background = Brushes.White;
+                }
             }
         }
 
         public void setNum(int n)
         {
+            Num = n;
+            lbl.FontSize = 35;
             lbl.Content = n.ToString();
             //TODO: If the number is already on use, set background to red
         }
 
-        private void lbl_MouseDown(object sender, MouseButtonEventArgs e)
+        //SomethingChanged check needed
+        /*public void Impossible(int n)
+        {//Remove number from the list of possibilities
+            if (Possible.Contains(n))
+            {
+                Possible.Remove(n);
+            }
+        }*/
+
+        public void Fix()
         {
+            Fixed = true;
+            grid.Background = Brushes.SandyBrown;
+        }
+
+        public void Fix(int n)
+        {
+            Fixed = true;
+            grid.Background = Brushes.SandyBrown;
+            setNum(n);
+        }
+
+        public void Unfix()
+        {
+            Fixed = false;
+            grid.Background = Brushes.White;
+        }
+
+        public void ShowPossibles()
+        {
+            lbl.Content = "";
+            lbl.FontSize = 15;
+            int cont = 0;
+            foreach (int item in Possible)
+            {
+                if (cont==3)
+                {
+                    lbl.Content += "\n";
+                    cont = 0;
+                }
+                lbl.Content += item + "  ";
+                cont++;
+            }
+        }
+
+        private void lbl_MouseDown(object sender, MouseButtonEventArgs e)
+        {//Click Event
             //Deselect other cells
-            MainWindow.UpdateSelection();
+            MainWindow.Unselect();
             //Select this cell
             selected = true;
             MainWindow.selectedCell = this;
