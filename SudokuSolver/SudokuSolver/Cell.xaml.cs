@@ -62,6 +62,9 @@ namespace SudokuSolver
             Num = n;
             lbl.FontSize = 35;
             lbl.Content = n.ToString();
+            Solved = true;
+            Possible.Clear();
+            Possible.Add(n);
             //TODO: If the number is already on use, set background to red
         }
 
@@ -78,6 +81,8 @@ namespace SudokuSolver
         {
             Fixed = true;
             grid.Background = Brushes.SandyBrown;
+            Possible.Clear();
+            Possible.Add(Num);
         }
 
         public void Fix(int n)
@@ -85,6 +90,8 @@ namespace SudokuSolver
             Fixed = true;
             grid.Background = Brushes.SandyBrown;
             setNum(n);
+            Possible.Clear();
+            Possible.Add(n);
         }
 
         public void Unfix()
@@ -96,7 +103,7 @@ namespace SudokuSolver
         public void ShowPossibles()
         {
             lbl.Content = "";
-            lbl.FontSize = 15;
+            lbl.FontSize = 12;
             int cont = 0;
             foreach (int item in Possible)
             {

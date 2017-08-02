@@ -46,11 +46,20 @@ namespace SudokuSolver
         int aux = -1;
         bool somethingChanged = false;
 
+        List<AuxObj> auxObjList = new List<AuxObj>();
+        int contChanges = -1;
+        
+        delegate void InterfaceDebug();
+        InterfaceDebug id;
+
+
+        /*************************************************************************************************************************************************/
         public MainWindow()
         {
             InitializeComponent();
             ResetSudoku();
         }
+#region Delegates
         void UpdateCellNumber()
         {
             if (aux > 0)
@@ -69,7 +78,19 @@ namespace SudokuSolver
             selectedCell.selected = true;
             selectedCell.SelectionChanged();
         }
-
+        
+        void InterfaceDebugger()
+        {
+            if (selectedCell.Opacity == 1)
+            {
+                selectedCell.Opacity = 0.5;
+            }
+            else
+            {
+                selectedCell.Opacity = 1;
+            }
+        }
+#endregion
 
         public static void Unselect()
         {
@@ -125,37 +146,162 @@ namespace SudokuSolver
             }
             //TODO: Comprobar que el Sudoku es válido
 
-            //t = new Thread(Solve);
-            //t.Start();
+            t = new Thread(Solve);
+            t.Start();
             //Mientras no lo haya resuelto, intenta llegar a una solución
+        }
+
+        void Solve()
+        {
             bool solved = false;
             while (!solved)
             {
+                Descartar();
 
+                #region CheckPossibles
+                //if (contChanges == 0)
+                //{
+                //Si después de todo lo anterior, el programa ya no es capaz de seguir descartando posibilidades,
+                 //busca si en alguna Row/Col/Box hay algún nº que sólo es posible colocarlo en una celda concreta
+                    #region CheckBoxes
+                    //TODO: Refactoriza esto, pls
+                    for (int c = 0; c < 3; c++)
+                    {//Dentro de esa Box, recorre Row
+                        for (int d = 0; d < 3; d++)
+                        {//Recorre Col dentro de esa Box -> Celda a Celda
+                            LoadAuxObjList(array11[c, d]);
+                        }
+                    }
+                    CheckAuxObjList();
+                    for (int c = 0; c < 3; c++)
+                    {//Dentro de esa Box, recorre Row
+                        for (int d = 0; d < 3; d++)
+                        {//Recorre Col dentro de esa Box -> Celda a Celda
+                            LoadAuxObjList(array12[c, d]);
+                        }
+                    }
+                    CheckAuxObjList();
+                    for (int c = 0; c < 3; c++)
+                    {//Dentro de esa Box, recorre Row
+                        for (int d = 0; d < 3; d++)
+                        {//Recorre Col dentro de esa Box -> Celda a Celda
+                            LoadAuxObjList(array13[c, d]);
+                        }
+                    }
+                    CheckAuxObjList();
+                    for (int c = 0; c < 3; c++)
+                    {//Dentro de esa Box, recorre Row
+                        for (int d = 0; d < 3; d++)
+                        {//Recorre Col dentro de esa Box -> Celda a Celda
+                            LoadAuxObjList(array21[c, d]);
+                        }
+                    }
+                    CheckAuxObjList();
+                    for (int c = 0; c < 3; c++)
+                    {//Dentro de esa Box, recorre Row
+                        for (int d = 0; d < 3; d++)
+                        {//Recorre Col dentro de esa Box -> Celda a Celda
+                            LoadAuxObjList(array22[c, d]);
+                        }
+                    }
+                    CheckAuxObjList();
+                    for (int c = 0; c < 3; c++)
+                    {//Dentro de esa Box, recorre Row
+                        for (int d = 0; d < 3; d++)
+                        {//Recorre Col dentro de esa Box -> Celda a Celda
+                            LoadAuxObjList(array23[c, d]);
+                        }
+                    }
+                    CheckAuxObjList();
+                    for (int c = 0; c < 3; c++)
+                    {//Dentro de esa Box, recorre Row
+                        for (int d = 0; d < 3; d++)
+                        {//Recorre Col dentro de esa Box -> Celda a Celda
+                            LoadAuxObjList(array31[c, d]);
+                        }
+                    }
+                    CheckAuxObjList();
+                    for (int c = 0; c < 3; c++)
+                    {//Dentro de esa Box, recorre Row
+                        for (int d = 0; d < 3; d++)
+                        {//Recorre Col dentro de esa Box -> Celda a Celda
+                            LoadAuxObjList(array32[c, d]);
+                        }
+                    }
+                    CheckAuxObjList();
+                    for (int c = 0; c < 3; c++)
+                    {//Dentro de esa Box, recorre Row
+                        for (int d = 0; d < 3; d++)
+                        {//Recorre Col dentro de esa Box -> Celda a Celda
+                            LoadAuxObjList(array33[c, d]);
+                        }
+                    }
+                    CheckAuxObjList();
+
+
+                    //foreach (Cell[,] item in arrays)
+                    //{
+                    //    //auxObjList = new List<AuxObj>();
+                    //    for (int i = 0; i < 3; i++)
+                    //    {
+                    //        for (int j = 0; j < 3; j++)
+                    //        {
+                    //            LoadAuxObjList(cellsArray[i, j]);
+                    //        }
+                    //    }
+                    //    CheckAuxObjList();
+                    //}
+                    #endregion
+                    #region CheckRows
+                    for (int i = 0; i < 9; i++)
+                    {
+                        for (int j = 0; j < 9; j++)
+                        {
+                            LoadAuxObjList(cellsArray[i, j]);
+                        }
+                        CheckAuxObjList();
+                    }
+                    #endregion
+                    #region CheckCols
+                    for (int i = 0; i < 9; i++)
+                    {
+                        for (int j = 0; j < 9; j++)
+                        {
+                            LoadAuxObjList(cellsArray[j, i]);
+                        }
+                        CheckAuxObjList();
+                    }
+                    #endregion
+                //}
+                #endregion
+
+                var result = MessageBox.Show("Keep finding solution?", "", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.No)
+                {
+                    solved = true;
+                }
+            }
+        }
+
+        void Descartar()
+        {//Intenta descartar nº hasta que sólo quede uno en cada celda -> Orden: Box, Row, Col
+            while (contChanges != 0)
+            {
+                contChanges = 0;//Para saber cuando el programa ya no es capaz de descartar más nº posibles
                 #region Boxes
                 foreach (Cell[,] item in arrays)
-                {
-                    Descartes = new HashSet<int>();
-                    do
                     {
-                        somethingChanged = false;
-                        for (int i = 0; i < 3; i++)
+                        Descartes = new HashSet<int>();
+                        do
                         {
-                            for (int j = 0; j < 3; j++)
+                            somethingChanged = false;
+                            for (int i = 0; i < 3; i++)
                             {
-                                selectedCell = item[i, j];
-                                if (selectedCell.Fixed || selectedCell.Solved)
-                                {//Una celda fija
-                                    if (!Descartes.Contains(selectedCell.Num))
-                                    {
-                                        Descartes.Add(selectedCell.Num);
-                                        somethingChanged = true;
-                                    }
-                                }
-                                else
-                                {//Es una celda no fija
-                                    if (selectedCell.Num > 0)
-                                    {//Tiene un nº
+                                for (int j = 0; j < 3; j++)
+                                {
+                                    selectedCell = item[i, j];
+                                    if (selectedCell.Fixed || selectedCell.Solved)
+                                    {//Una celda fija
                                         if (!Descartes.Contains(selectedCell.Num))
                                         {
                                             Descartes.Add(selectedCell.Num);
@@ -163,34 +309,47 @@ namespace SudokuSolver
                                         }
                                     }
                                     else
-                                    {//Hay que hallar el nº
-                                        foreach (int n in Descartes)
-                                        {//Quita los descartes de la lista de posibilidades
-                                            if (selectedCell.Possible.Contains(n))
+                                    {//Es una celda no fija
+                                        if (selectedCell.Num > 0)
+                                        {//Tiene un nº
+                                            if (!Descartes.Contains(selectedCell.Num))
                                             {
-                                                selectedCell.Possible.Remove(n);
+                                                Descartes.Add(selectedCell.Num);
                                                 somethingChanged = true;
                                             }
                                         }
-                                        if (selectedCell.Possible.Count == 1)
-                                        {
-                                            aux = selectedCell.Possible[0];
-                                            somethingChanged = true;
+                                        else
+                                        {//Hay que hallar el nº
+                                            foreach (int n in Descartes)
+                                            {//Quita los descartes de la lista de posibilidades
+                                                if (selectedCell.Possible.Contains(n))
+                                                {
+                                                    selectedCell.Possible.Remove(n);
+                                                    somethingChanged = true;
+                                                    contChanges++;
+                                                }
+                                            }
+                                            if (selectedCell.Possible.Count == 1)
+                                            {
+                                                aux = selectedCell.Possible[0];
+                                                somethingChanged = true;
+                                                contChanges++;
+                                            }
                                         }
                                     }
+                                    Dispatcher.Invoke(ui);
                                 }
-                                Dispatcher.Invoke(ui);
                             }
-                        }
-                    } while (somethingChanged);
-                }
-                #endregion
-                //Rows
+                        } while (somethingChanged);
+                    }
+                    #endregion
+                Descartes = new HashSet<int>();
+                #region Rows
                 for (int i = 0; i < 9; i++)
                 {
                     for (int j = 0; j < 9; j++)
                     {
-                        Recorrer(cellsArray[i, j]);
+                        CheckCell(cellsArray[i, j]);
                     }
                     if (somethingChanged)
                     {//Si algo ha cambiado, vuelve a recorrer la fila
@@ -200,14 +359,16 @@ namespace SudokuSolver
                     else
                     {
                         Descartes = new HashSet<int>();
+                        //auxObjList = new List<AuxObj>();
                     }
                 }
-                //Cols
+                #endregion
+                #region Cols
                 for (int j = 0; j < 9; j++)
                 {
                     for (int i = 0; i < 9; i++)
                     {
-                        Recorrer(cellsArray[i, j]);
+                        CheckCell(cellsArray[i, j]);
                     }
                     if (somethingChanged)
                     {//Si algo ha cambiado, vuelve a recorrer la columna
@@ -217,131 +378,15 @@ namespace SudokuSolver
                     else
                     {
                         Descartes = new HashSet<int>();
+                        //auxObjList = new List<AuxObj>();
                     }
                 }
-
-
-
-                #region Rows
-                /*
-                for (int i = 0; i < 9; i++)
-                {
-                    for (int j = 0; j < 9; j++)
-                    {
-                        selectedCell = cellsArray[i, j];
-                        if (selectedCell.Fixed || selectedCell.Solved)
-                        {//Una celda fija
-                            if (!Descartes.Contains(selectedCell.Num))
-                            {
-                                Descartes.Add(selectedCell.Num);
-                                somethingChanged = true;
-                            }
-                        }
-                        else
-                        {//Es una celda no fija
-                            if (selectedCell.Num > 0)
-                            {//Tiene un nº
-                                if (!Descartes.Contains(selectedCell.Num))
-                                {
-                                    Descartes.Add(selectedCell.Num);
-                                    somethingChanged = true;
-                                }
-                            }
-                            else
-                            {//Hay que hallar el nº
-                                foreach (int n in Descartes)
-                                {//Quita los descartes de la lista de posibilidades
-                                    if (selectedCell.Possible.Contains(n))
-                                    {
-                                        selectedCell.Possible.Remove(n);
-                                        somethingChanged = true;
-                                    }
-                                }
-                                if (selectedCell.Possible.Count == 1)
-                                {
-                                    aux = selectedCell.Possible[0];
-                                    somethingChanged = true;
-                                }
-                            }
-                        }
-                        Dispatcher.Invoke(ui);
-                    }
-                    if (somethingChanged)
-                    {//Si algo ha cambiado, vuelve a recorrer la fila
-                        i--;
-                        somethingChanged = false;
-                    }
-                    else
-                    {
-                        Descartes = new HashSet<int>();
-                    }
-                }*/
                 #endregion
-                #region Columns
-                /*
-                for (int i = 0; i < 9; i++)
-                {
-                    for (int j = 0; j < 9; j++)
-                    {
-                        selectedCell = cellsArray[j, i];
-                        if (selectedCell.Fixed || selectedCell.Solved)
-                        {//Una celda fija
-                            if (!Descartes.Contains(selectedCell.Num))
-                            {
-                                Descartes.Add(selectedCell.Num);
-                                somethingChanged = true;
-                            }
-                        }
-                        else
-                        {//Es una celda no fija
-                            if (selectedCell.Num > 0)
-                            {//Tiene un nº
-                                if (!Descartes.Contains(selectedCell.Num))
-                                {
-                                    Descartes.Add(selectedCell.Num);
-                                    somethingChanged = true;
-                                }
-                            }
-                            else
-                            {//Hay que hallar el nº
-                                foreach (int n in Descartes)
-                                {//Quita los descartes de la lista de posibilidades
-                                    if (selectedCell.Possible.Contains(n))
-                                    {
-                                        selectedCell.Possible.Remove(n);
-                                        somethingChanged = true;
-                                    }
-                                }
-                                if (selectedCell.Possible.Count == 1)
-                                {
-                                    aux = selectedCell.Possible[0];
-                                    somethingChanged = true;
-                                }
-                            }
-                        }
-                        Dispatcher.Invoke(ui);
-                    }
-                    if (somethingChanged)
-                    {//Si algo ha cambiado, vuelve a recorrer la columna
-                        i--;
-                        somethingChanged = false;
-                    }
-                    else
-                    {
-                        Descartes = new HashSet<int>();
-                    }
-                }*/
-                #endregion
-
-
-
-                var result = MessageBox.Show("Keep finding solution?", "", MessageBoxButton.YesNo);
-                if (result == MessageBoxResult.No)
-                {
-                    solved = true;
-                }
             }
+            
         }
+
+
 
         private void buttClean_Click(object sender, RoutedEventArgs e)
         {
@@ -505,11 +550,12 @@ namespace SudokuSolver
                 }
             }
             ui = new UpdateInterface(UpdateCellNumber);
+            id = new InterfaceDebug(InterfaceDebugger);
             Descartes = new HashSet<int>();
             arrays = new List<Cell[,]> { array11, array12, array13, array21, array22, array23, array31, array32, array33 };
         }
 
-        void Recorrer(Cell c)
+        void CheckCell(Cell c)
         {
             selectedCell = c;
             if (selectedCell.Fixed || selectedCell.Solved)
@@ -538,16 +584,74 @@ namespace SudokuSolver
                         {
                             selectedCell.Possible.Remove(n);
                             somethingChanged = true;
+                            contChanges++;
                         }
                     }
                     if (selectedCell.Possible.Count == 1)
                     {
                         aux = selectedCell.Possible[0];
                         somethingChanged = true;
+                        contChanges++;
                     }
                 }
             }
             Dispatcher.Invoke(ui);
         }
+
+        void LoadAuxObjList(Cell c)
+        {
+            selectedCell = c;
+            Dispatcher.Invoke(id);
+            if (!selectedCell.Fixed && !selectedCell.Solved)
+            {
+                foreach (int n in selectedCell.Possible)
+                {
+                    if (auxObjList.Where(z => z.Num == n).Count() == 0)
+                    {//Si no existe ningún objeto en la lista con este nº, lo crea
+                        auxObjList.Add(new AuxObj(n, selectedCell));
+                        somethingChanged = true;
+                        contChanges++;
+                    }
+                    else
+                    {//Si ya existe, +1Rep
+                        auxObjList.Single(z => z.Num == n).Reps++;
+                    }
+                }
+            }
+            Dispatcher.Invoke(id);
+        }
+
+        void CheckAuxObjList()
+        {//Cuando acaba de recorrer una Row/Col/Box
+            foreach (AuxObj aobj in auxObjList)
+            {
+                if (aobj.Reps == 1)
+                {//Significa que aobj.Num sólo puede ir en aobj.Cell
+                    aux = aobj.Num;
+                    selectedCell = aobj.Cell;
+                    //somethingChanged = true;
+                    Dispatcher.Invoke(ui);
+                    //Cuando descubre algún número, debería mirar qué cosas puede descartar
+                    Descartar();
+                }
+            }
+            auxObjList = new List<AuxObj>();
+        }
+
+        private void showMe_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (Cell cell in cellsArray)
+            {
+                Console.WriteLine("");
+                foreach (int n in cell.Possible)
+                {
+                    Console.Write(n+" ");
+                }
+            }
+        }
+
+        //Debo ir comprobando las listas de Posibles
+        //En caso de que un nº aparezca una única vez como posible en toda la Row/Col/Box
+        //SetNum
     }
 }
