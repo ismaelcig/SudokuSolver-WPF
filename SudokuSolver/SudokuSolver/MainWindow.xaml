@@ -8,143 +8,226 @@
         Title="MainWindow" Height="600" Width="525" KeyDown="Window_KeyDown">
     <Grid>
         <Border BorderBrush="Black" BorderThickness="1" Height="452" Width="452" Margin="30,30,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
-            <Grid>
-                <Grid Panel.ZIndex="5">
-                    <Grid.ColumnDefinitions>
+            <Grid x:Name="BoxContainer">
+                <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="150"/>
                         <ColumnDefinition Width="150"/>
                         <ColumnDefinition Width="150"/>
                     </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="150"/>
-                        <RowDefinition Height="150"/>
-                        <RowDefinition Height="150"/>
-                    </Grid.RowDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="150"/>
+                    <RowDefinition Height="150"/>
+                    <RowDefinition Height="150"/>
+                </Grid.RowDefinitions>
 
-                    <Border BorderBrush="Black" BorderThickness="2" IsHitTestVisible="True"/>
-                    <Border BorderBrush="Black" BorderThickness="2" Grid.Column="1" IsHitTestVisible="False"/>
-                    <Border BorderBrush="Black" BorderThickness="2" Grid.Column="2" IsHitTestVisible="False"/>
-                    <Border BorderBrush="Black" BorderThickness="2" Grid.Row="1" IsHitTestVisible="False"/>
-                    <Border BorderBrush="Black" BorderThickness="2" Grid.Row="1" Grid.Column="1" IsHitTestVisible="False"/>
-                    <Border BorderBrush="Black" BorderThickness="2" Grid.Row="1" Grid.Column="2" IsHitTestVisible="False"/>
-                    <Border BorderBrush="Black" BorderThickness="2" Grid.Row="2" IsHitTestVisible="False"/>
-                    <Border BorderBrush="Black" BorderThickness="2" Grid.Row="2" Grid.Column="1" IsHitTestVisible="False"/>
-                    <Border BorderBrush="Black" BorderThickness="2" Grid.Row="2" Grid.Column="2" IsHitTestVisible="False"/>
-                </Grid>
-                <Grid x:Name="g">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="50"/>
-                        <ColumnDefinition Width="50"/>
-                        <ColumnDefinition Width="50"/>
-                        <ColumnDefinition Width="50"/>
-                        <ColumnDefinition Width="50"/>
-                        <ColumnDefinition Width="50"/>
-                        <ColumnDefinition Width="50"/>
-                        <ColumnDefinition Width="50"/>
-                        <ColumnDefinition Width="50"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="50"/>
-                        <RowDefinition Height="50"/>
-                        <RowDefinition Height="50"/>
-                        <RowDefinition Height="50"/>
-                        <RowDefinition Height="50"/>
-                        <RowDefinition Height="50"/>
-                        <RowDefinition Height="50"/>
-                        <RowDefinition Height="50"/>
-                        <RowDefinition Height="50"/>
-                    </Grid.RowDefinitions>
-                    <local:Cell x:Name="cell00" Grid.Row="0" Grid.Column="0"/>
-                    <local:Cell x:Name="cell01" Grid.Row="0" Grid.Column="1"/>
-                    <local:Cell x:Name="cell02" Grid.Row="0" Grid.Column="2"/>
-                    <local:Cell x:Name="cell03" Grid.Row="0" Grid.Column="3"/>
-                    <local:Cell x:Name="cell04" Grid.Row="0" Grid.Column="4"/>
-                    <local:Cell x:Name="cell05" Grid.Row="0" Grid.Column="5"/>
-                    <local:Cell x:Name="cell06" Grid.Row="0" Grid.Column="6"/>
-                    <local:Cell x:Name="cell07" Grid.Row="0" Grid.Column="7"/>
-                    <local:Cell x:Name="cell08" Grid.Row="0" Grid.Column="8"/>
+                <Border BorderBrush="Black" BorderThickness="2">
+                    <Grid x:Name="Box11">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="50"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                        </Grid.RowDefinitions>
+                        <local:Cell x:Name="cell00" Grid.Row="0" Grid.Column="0"/>
+                        <local:Cell x:Name="cell01" Grid.Row="0" Grid.Column="1"/>
+                        <local:Cell x:Name="cell02" Grid.Row="0" Grid.Column="2"/>
+                        <local:Cell x:Name="cell10" Grid.Row="1" Grid.Column="0"/>
+                        <local:Cell x:Name="cell11" Grid.Row="1" Grid.Column="1"/>
+                        <local:Cell x:Name="cell12" Grid.Row="1" Grid.Column="2"/>
+                        <local:Cell x:Name="cell20" Grid.Row="2" Grid.Column="0"/>
+                        <local:Cell x:Name="cell21" Grid.Row="2" Grid.Column="1"/>
+                        <local:Cell x:Name="cell22" Grid.Row="2" Grid.Column="2"/>
 
-                    <local:Cell x:Name="cell10" Grid.Row="1" Grid.Column="0"/>
-                    <local:Cell x:Name="cell11" Grid.Row="1" Grid.Column="1"/>
-                    <local:Cell x:Name="cell12" Grid.Row="1" Grid.Column="2"/>
-                    <local:Cell x:Name="cell13" Grid.Row="1" Grid.Column="3"/>
-                    <local:Cell x:Name="cell14" Grid.Row="1" Grid.Column="4"/>
-                    <local:Cell x:Name="cell15" Grid.Row="1" Grid.Column="5"/>
-                    <local:Cell x:Name="cell16" Grid.Row="1" Grid.Column="6"/>
-                    <local:Cell x:Name="cell17" Grid.Row="1" Grid.Column="7"/>
-                    <local:Cell x:Name="cell18" Grid.Row="1" Grid.Column="8"/>
-
-                    <local:Cell x:Name="cell20" Grid.Row="2" Grid.Column="0"/>
-                    <local:Cell x:Name="cell21" Grid.Row="2" Grid.Column="1"/>
-                    <local:Cell x:Name="cell22" Grid.Row="2" Grid.Column="2"/>
-                    <local:Cell x:Name="cell23" Grid.Row="2" Grid.Column="3"/>
-                    <local:Cell x:Name="cell24" Grid.Row="2" Grid.Column="4"/>
-                    <local:Cell x:Name="cell25" Grid.Row="2" Grid.Column="5"/>
-                    <local:Cell x:Name="cell26" Grid.Row="2" Grid.Column="6"/>
-                    <local:Cell x:Name="cell27" Grid.Row="2" Grid.Column="7"/>
-                    <local:Cell x:Name="cell28" Grid.Row="2" Grid.Column="8"/>
-
-
-                    <local:Cell x:Name="cell30" Grid.Row="3" Grid.Column="0"/>
-                    <local:Cell x:Name="cell31" Grid.Row="3" Grid.Column="1"/>
-                    <local:Cell x:Name="cell32" Grid.Row="3" Grid.Column="2"/>
-                    <local:Cell x:Name="cell33" Grid.Row="3" Grid.Column="3"/>
-                    <local:Cell x:Name="cell34" Grid.Row="3" Grid.Column="4"/>
-                    <local:Cell x:Name="cell35" Grid.Row="3" Grid.Column="5"/>
-                    <local:Cell x:Name="cell36" Grid.Row="3" Grid.Column="6"/>
-                    <local:Cell x:Name="cell37" Grid.Row="3" Grid.Column="7"/>
-                    <local:Cell x:Name="cell38" Grid.Row="3" Grid.Column="8"/>
-
-                    <local:Cell x:Name="cell40" Grid.Row="4" Grid.Column="0"/>
-                    <local:Cell x:Name="cell41" Grid.Row="4" Grid.Column="1"/>
-                    <local:Cell x:Name="cell42" Grid.Row="4" Grid.Column="2"/>
-                    <local:Cell x:Name="cell43" Grid.Row="4" Grid.Column="3"/>
-                    <local:Cell x:Name="cell44" Grid.Row="4" Grid.Column="4"/>
-                    <local:Cell x:Name="cell45" Grid.Row="4" Grid.Column="5"/>
-                    <local:Cell x:Name="cell46" Grid.Row="4" Grid.Column="6"/>
-                    <local:Cell x:Name="cell47" Grid.Row="4" Grid.Column="7"/>
-                    <local:Cell x:Name="cell48" Grid.Row="4" Grid.Column="8"/>
-
-                    <local:Cell x:Name="cell50" Grid.Row="5" Grid.Column="0"/>
-                    <local:Cell x:Name="cell51" Grid.Row="5" Grid.Column="1"/>
-                    <local:Cell x:Name="cell52" Grid.Row="5" Grid.Column="2"/>
-                    <local:Cell x:Name="cell53" Grid.Row="5" Grid.Column="3"/>
-                    <local:Cell x:Name="cell54" Grid.Row="5" Grid.Column="4"/>
-                    <local:Cell x:Name="cell55" Grid.Row="5" Grid.Column="5"/>
-                    <local:Cell x:Name="cell56" Grid.Row="5" Grid.Column="6"/>
-                    <local:Cell x:Name="cell57" Grid.Row="5" Grid.Column="7"/>
-                    <local:Cell x:Name="cell58" Grid.Row="5" Grid.Column="8"/>
-
-                    <local:Cell x:Name="cell60" Grid.Row="6" Grid.Column="0"/>
-                    <local:Cell x:Name="cell61" Grid.Row="6" Grid.Column="1"/>
-                    <local:Cell x:Name="cell62" Grid.Row="6" Grid.Column="2"/>
-                    <local:Cell x:Name="cell63" Grid.Row="6" Grid.Column="3"/>
-                    <local:Cell x:Name="cell64" Grid.Row="6" Grid.Column="4"/>
-                    <local:Cell x:Name="cell65" Grid.Row="6" Grid.Column="5"/>
-                    <local:Cell x:Name="cell66" Grid.Row="6" Grid.Column="6"/>
-                    <local:Cell x:Name="cell67" Grid.Row="6" Grid.Column="7"/>
-                    <local:Cell x:Name="cell68" Grid.Row="6" Grid.Column="8"/>
-
-                    <local:Cell x:Name="cell70" Grid.Row="7" Grid.Column="0"/>
-                    <local:Cell x:Name="cell71" Grid.Row="7" Grid.Column="1"/>
-                    <local:Cell x:Name="cell72" Grid.Row="7" Grid.Column="2"/>
-                    <local:Cell x:Name="cell73" Grid.Row="7" Grid.Column="3"/>
-                    <local:Cell x:Name="cell74" Grid.Row="7" Grid.Column="4"/>
-                    <local:Cell x:Name="cell75" Grid.Row="7" Grid.Column="5"/>
-                    <local:Cell x:Name="cell76" Grid.Row="7" Grid.Column="6"/>
-                    <local:Cell x:Name="cell77" Grid.Row="7" Grid.Column="7"/>
-                    <local:Cell x:Name="cell78" Grid.Row="7" Grid.Column="8"/>
-
-                    <local:Cell x:Name="cell80" Grid.Row="8" Grid.Column="0"/>
-                    <local:Cell x:Name="cell81" Grid.Row="8" Grid.Column="1"/>
-                    <local:Cell x:Name="cell82" Grid.Row="8" Grid.Column="2"/>
-                    <local:Cell x:Name="cell83" Grid.Row="8" Grid.Column="3"/>
-                    <local:Cell x:Name="cell84" Grid.Row="8" Grid.Column="4"/>
-                    <local:Cell x:Name="cell85" Grid.Row="8" Grid.Column="5"/>
-                    <local:Cell x:Name="cell86" Grid.Row="8" Grid.Column="6"/>
-                    <local:Cell x:Name="cell87" Grid.Row="8" Grid.Column="7"/>
-                    <local:Cell x:Name="cell88" Grid.Row="8" Grid.Column="8"/>
-                </Grid>
+                    </Grid>
+                </Border>
+                <Border BorderBrush="Black" BorderThickness="2" Grid.Column="1">
+                    <Grid x:Name="Box12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="50"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                        </Grid.RowDefinitions>
+                        <local:Cell x:Name="cell03" Grid.Row="0" Grid.Column="0"/>
+                        <local:Cell x:Name="cell04" Grid.Row="0" Grid.Column="1"/>
+                        <local:Cell x:Name="cell05" Grid.Row="0" Grid.Column="2"/>
+                        <local:Cell x:Name="cell13" Grid.Row="1" Grid.Column="0"/>
+                        <local:Cell x:Name="cell14" Grid.Row="1" Grid.Column="1"/>
+                        <local:Cell x:Name="cell15" Grid.Row="1" Grid.Column="2"/>
+                        <local:Cell x:Name="cell23" Grid.Row="2" Grid.Column="0"/>
+                        <local:Cell x:Name="cell24" Grid.Row="2" Grid.Column="1"/>
+                        <local:Cell x:Name="cell25" Grid.Row="2" Grid.Column="2"/>
+                    </Grid>
+                </Border>
+                <Border BorderBrush="Black" BorderThickness="2" Grid.Column="2">
+                    <Grid x:Name="Box13">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="50"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                        </Grid.RowDefinitions>
+                        <local:Cell x:Name="cell06" Grid.Row="0" Grid.Column="0"/>
+                        <local:Cell x:Name="cell07" Grid.Row="0" Grid.Column="1"/>
+                        <local:Cell x:Name="cell08" Grid.Row="0" Grid.Column="2"/>
+                        <local:Cell x:Name="cell16" Grid.Row="1" Grid.Column="0"/>
+                        <local:Cell x:Name="cell17" Grid.Row="1" Grid.Column="1"/>
+                        <local:Cell x:Name="cell18" Grid.Row="1" Grid.Column="2"/>
+                        <local:Cell x:Name="cell26" Grid.Row="2" Grid.Column="0"/>
+                        <local:Cell x:Name="cell27" Grid.Row="2" Grid.Column="1"/>
+                        <local:Cell x:Name="cell28" Grid.Row="2" Grid.Column="2"/>
+                    </Grid>
+                </Border>
+                <Border BorderBrush="Black" BorderThickness="2" Grid.Row="1">
+                    <Grid x:Name="Box21">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="50"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                        </Grid.RowDefinitions>
+                        <local:Cell x:Name="cell30" Grid.Row="0" Grid.Column="0"/>
+                        <local:Cell x:Name="cell31" Grid.Row="0" Grid.Column="1"/>
+                        <local:Cell x:Name="cell32" Grid.Row="0" Grid.Column="2"/>
+                        <local:Cell x:Name="cell40" Grid.Row="1" Grid.Column="0"/>
+                        <local:Cell x:Name="cell41" Grid.Row="1" Grid.Column="1"/>
+                        <local:Cell x:Name="cell42" Grid.Row="1" Grid.Column="2"/>
+                        <local:Cell x:Name="cell50" Grid.Row="2" Grid.Column="0"/>
+                        <local:Cell x:Name="cell51" Grid.Row="2" Grid.Column="1"/>
+                        <local:Cell x:Name="cell52" Grid.Row="2" Grid.Column="2"/>
+                    </Grid>
+                </Border>
+                <Border BorderBrush="Black" BorderThickness="2" Grid.Row="1" Grid.Column="1">
+                    <Grid x:Name="Box22">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="50"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                        </Grid.RowDefinitions>
+                        <local:Cell x:Name="cell33" Grid.Row="0" Grid.Column="0"/>
+                        <local:Cell x:Name="cell34" Grid.Row="0" Grid.Column="1"/>
+                        <local:Cell x:Name="cell35" Grid.Row="0" Grid.Column="2"/>
+                        <local:Cell x:Name="cell43" Grid.Row="1" Grid.Column="0"/>
+                        <local:Cell x:Name="cell44" Grid.Row="1" Grid.Column="1"/>
+                        <local:Cell x:Name="cell45" Grid.Row="1" Grid.Column="2"/>
+                        <local:Cell x:Name="cell53" Grid.Row="2" Grid.Column="0"/>
+                        <local:Cell x:Name="cell54" Grid.Row="2" Grid.Column="1"/>
+                        <local:Cell x:Name="cell55" Grid.Row="2" Grid.Column="2"/>
+                    </Grid>
+                </Border>
+                <Border BorderBrush="Black" BorderThickness="2" Grid.Row="1" Grid.Column="2">
+                    <Grid x:Name="Box23">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="50"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                        </Grid.RowDefinitions>
+                        <local:Cell x:Name="cell36" Grid.Row="0" Grid.Column="0"/>
+                        <local:Cell x:Name="cell37" Grid.Row="0" Grid.Column="1"/>
+                        <local:Cell x:Name="cell38" Grid.Row="0" Grid.Column="2"/>
+                        <local:Cell x:Name="cell46" Grid.Row="1" Grid.Column="0"/>
+                        <local:Cell x:Name="cell47" Grid.Row="1" Grid.Column="1"/>
+                        <local:Cell x:Name="cell48" Grid.Row="1" Grid.Column="2"/>
+                        <local:Cell x:Name="cell56" Grid.Row="2" Grid.Column="0"/>
+                        <local:Cell x:Name="cell57" Grid.Row="2" Grid.Column="1"/>
+                        <local:Cell x:Name="cell58" Grid.Row="2" Grid.Column="2"/>
+                    </Grid>
+                </Border>
+                <Border BorderBrush="Black" BorderThickness="2" Grid.Row="2">
+                    <Grid x:Name="Box31">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="50"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                        </Grid.RowDefinitions>
+                        <local:Cell x:Name="cell60" Grid.Row="0" Grid.Column="0"/>
+                        <local:Cell x:Name="cell61" Grid.Row="0" Grid.Column="1"/>
+                        <local:Cell x:Name="cell62" Grid.Row="0" Grid.Column="2"/>
+                        <local:Cell x:Name="cell70" Grid.Row="1" Grid.Column="0"/>
+                        <local:Cell x:Name="cell71" Grid.Row="1" Grid.Column="1"/>
+                        <local:Cell x:Name="cell72" Grid.Row="1" Grid.Column="2"/>
+                        <local:Cell x:Name="cell80" Grid.Row="2" Grid.Column="0"/>
+                        <local:Cell x:Name="cell81" Grid.Row="2" Grid.Column="1"/>
+                        <local:Cell x:Name="cell82" Grid.Row="2" Grid.Column="2"/>
+                    </Grid>
+                </Border>
+                <Border BorderBrush="Black" BorderThickness="2" Grid.Row="2" Grid.Column="1">
+                    <Grid x:Name="Box32">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="50"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                        </Grid.RowDefinitions>
+                        <local:Cell x:Name="cell63" Grid.Row="0" Grid.Column="0"/>
+                        <local:Cell x:Name="cell64" Grid.Row="0" Grid.Column="1"/>
+                        <local:Cell x:Name="cell65" Grid.Row="0" Grid.Column="2"/>
+                        <local:Cell x:Name="cell73" Grid.Row="1" Grid.Column="0"/>
+                        <local:Cell x:Name="cell74" Grid.Row="1" Grid.Column="1"/>
+                        <local:Cell x:Name="cell75" Grid.Row="1" Grid.Column="2"/>
+                        <local:Cell x:Name="cell83" Grid.Row="2" Grid.Column="0"/>
+                        <local:Cell x:Name="cell84" Grid.Row="2" Grid.Column="1"/>
+                        <local:Cell x:Name="cell85" Grid.Row="2" Grid.Column="2"/>
+                    </Grid>
+                </Border>
+                <Border BorderBrush="Black" BorderThickness="2" Grid.Row="2" Grid.Column="2">
+                    <Grid x:Name="Box33">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="50"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                        </Grid.RowDefinitions>
+                        <local:Cell x:Name="cell66" Grid.Row="0" Grid.Column="0"/>
+                        <local:Cell x:Name="cell67" Grid.Row="0" Grid.Column="1"/>
+                        <local:Cell x:Name="cell68" Grid.Row="0" Grid.Column="2"/>
+                        <local:Cell x:Name="cell76" Grid.Row="1" Grid.Column="0"/>
+                        <local:Cell x:Name="cell77" Grid.Row="1" Grid.Column="1"/>
+                        <local:Cell x:Name="cell78" Grid.Row="1" Grid.Column="2"/>
+                        <local:Cell x:Name="cell86" Grid.Row="2" Grid.Column="0"/>
+                        <local:Cell x:Name="cell87" Grid.Row="2" Grid.Column="1"/>
+                        <local:Cell x:Name="cell88" Grid.Row="2" Grid.Column="2"/>
+                    </Grid>
+                </Border>
 
             </Grid>
         </Border>

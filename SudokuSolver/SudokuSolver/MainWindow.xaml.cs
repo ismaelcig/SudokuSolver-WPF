@@ -90,7 +90,211 @@ namespace SudokuSolver
                 selectedCell.Opacity = 1;
             }
         }
-#endregion
+        #endregion
+
+
+        void ResetSudoku()
+        {
+            //Save cells in arrays
+            int asdf = 0;
+            #region Recuadro 11
+            array11[0, 0] = cell00;
+            array11[0, 1] = cell01;
+            array11[0, 2] = cell02;
+            array11[1, 0] = cell10;
+            array11[1, 1] = cell11;
+            array11[1, 2] = cell12;
+            array11[2, 0] = cell20;
+            array11[2, 1] = cell21;
+            array11[2, 2] = cell22;
+            foreach (Cell item in array11)
+            {
+                item.lbl.Content = asdf;
+                asdf++;
+            }
+            #endregion
+            #region Recuadro 12
+            array12[0, 0] = cell03;
+            array12[0, 1] = cell04;
+            array12[0, 2] = cell05;
+            array12[1, 0] = cell13;
+            array12[1, 1] = cell14;
+            array12[1, 2] = cell15;
+            array12[2, 0] = cell23;
+            array12[2, 1] = cell24;
+            array12[2, 2] = cell25;
+            foreach (Cell item in array12)
+            {
+                item.lbl.Content = asdf;
+                asdf++;
+            }
+            #endregion
+            #region Recuadro 13
+            array13[0, 0] = cell06;
+            array13[0, 1] = cell07;
+            array13[0, 2] = cell08;
+            array13[1, 0] = cell16;
+            array13[1, 1] = cell17;
+            array13[1, 2] = cell18;
+            array13[2, 0] = cell26;
+            array13[2, 1] = cell27;
+            array13[2, 2] = cell28;
+            foreach (Cell item in array13)
+            {
+                item.lbl.Content = asdf;
+                asdf++;
+            }
+            #endregion
+            #region Recuadro 21
+            array21[0, 0] = cell30;
+            array21[0, 1] = cell31;
+            array21[0, 2] = cell32;
+            array21[1, 0] = cell40;
+            array21[1, 1] = cell41;
+            array21[1, 2] = cell42;
+            array21[2, 0] = cell50;
+            array21[2, 1] = cell51;
+            array21[2, 2] = cell52;
+            foreach (Cell item in array21)
+            {
+                item.lbl.Content = asdf;
+                asdf++;
+            }
+            #endregion
+            #region Recuadro 22
+            array22[0, 0] = cell33;
+            array22[0, 1] = cell34;
+            array22[0, 2] = cell35;
+            array22[1, 0] = cell43;
+            array22[1, 1] = cell44;
+            array22[1, 2] = cell45;
+            array22[2, 0] = cell53;
+            array22[2, 1] = cell54;
+            array22[2, 2] = cell55;
+            foreach (Cell item in array22)
+            {
+                item.lbl.Content = asdf;
+                asdf++;
+            }
+            #endregion
+            #region Recuadro 23
+            array23[0, 0] = cell36;
+            array23[0, 1] = cell37;
+            array23[0, 2] = cell38;
+            array23[1, 0] = cell46;
+            array23[1, 1] = cell47;
+            array23[1, 2] = cell48;
+            array23[2, 0] = cell56;
+            array23[2, 1] = cell57;
+            array23[2, 2] = cell58;
+            foreach (Cell item in array23)
+            {
+                item.lbl.Content = asdf;
+                asdf++;
+            }
+            #endregion
+            #region Recuadro 31
+            array31[0, 0] = cell60;
+            array31[0, 1] = cell61;
+            array31[0, 2] = cell62;
+            array31[1, 0] = cell70;
+            array31[1, 1] = cell71;
+            array31[1, 2] = cell72;
+            array31[2, 0] = cell80;
+            array31[2, 1] = cell81;
+            array31[2, 2] = cell82;
+            foreach (Cell item in array31)
+            {
+                item.lbl.Content = asdf;
+                asdf++;
+            }
+            #endregion
+            #region Recuadro 32
+            array32[0, 0] = cell63;
+            array32[0, 1] = cell64;
+            array32[0, 2] = cell65;
+            array32[1, 0] = cell73;
+            array32[1, 1] = cell74;
+            array32[1, 2] = cell75;
+            array32[2, 0] = cell83;
+            array32[2, 1] = cell84;
+            array32[2, 2] = cell85;
+            foreach (Cell item in array32)
+            {
+                item.lbl.Content = asdf;
+                asdf++;
+            }
+            #endregion
+            #region Recuadro 33
+            array33[0, 0] = cell66;
+            array33[0, 1] = cell67;
+            array33[0, 2] = cell68;
+            array33[1, 0] = cell76;
+            array33[1, 1] = cell77;
+            array33[1, 2] = cell78;
+            array33[2, 0] = cell86;
+            array33[2, 1] = cell87;
+            array33[2, 2] = cell88;
+            foreach (Cell item in array33)
+            {
+                item.lbl.Content = asdf;
+                asdf++;
+            }
+            #endregion
+            //Save every cell
+            arrays = new List<Cell[,]>();
+            //arrays = {{ array11, array12, array13 }, {array21, array22, array23 }, {array31, array32, array33 } };
+            cellsArray = new Cell[9, 9];
+            #region Boxes11-13
+            Array.Copy(array11, 0, cellsArray, 0, 3);
+            Array.Copy(array12, 0, cellsArray, 3, 3);
+            Array.Copy(array13, 0, cellsArray, 6, 3);
+            Array.Copy(array11, 0, cellsArray, 9, 3);
+            Array.Copy(array12, 0, cellsArray, 12, 3);
+            Array.Copy(array13, 0, cellsArray, 15, 3);
+            Array.Copy(array11, 0, cellsArray, 18, 3);
+            Array.Copy(array12, 0, cellsArray, 21, 3);
+            Array.Copy(array13, 0, cellsArray, 24, 3);
+            #endregion
+            #region Boxes21-23
+            Array.Copy(array21, 0, cellsArray, 27, 3);
+            Array.Copy(array22, 0, cellsArray, 30, 3);
+            Array.Copy(array23, 0, cellsArray, 33, 3);
+            Array.Copy(array21, 0, cellsArray, 36, 3);
+            Array.Copy(array22, 0, cellsArray, 39, 3);
+            Array.Copy(array23, 0, cellsArray, 42, 3);
+            Array.Copy(array21, 0, cellsArray, 45, 3);
+            Array.Copy(array22, 0, cellsArray, 48, 3);
+            Array.Copy(array23, 0, cellsArray, 51, 3);
+            #endregion
+            #region Boxes31-33
+            Array.Copy(array31, 0, cellsArray, 54, 3);
+            Array.Copy(array32, 0, cellsArray, 57, 3);
+            Array.Copy(array33, 0, cellsArray, 60, 3);
+            Array.Copy(array31, 0, cellsArray, 63, 3);
+            Array.Copy(array32, 0, cellsArray, 66, 3);
+            Array.Copy(array33, 0, cellsArray, 69, 3);
+            Array.Copy(array31, 0, cellsArray, 72, 3);
+            Array.Copy(array32, 0, cellsArray, 75, 3);
+            Array.Copy(array33, 0, cellsArray, 78, 3);
+            #endregion
+
+            Console.WriteLine("");
+            int cont = 0;
+            foreach (Cell item in cellsArray)
+            {
+                Console.Write(item.lbl.Content + " ");
+                cont++;
+                if (cont == 9)
+                {
+                    cont = 0;
+                    Console.WriteLine("");
+                }
+            }
+            ui = new UpdateInterface(UpdateCellNumber);
+            id = new InterfaceDebug(InterfaceDebugger);
+            Descartes = new HashSet<int>();
+        }
 
         public static void Unselect()
         {
@@ -101,6 +305,7 @@ namespace SudokuSolver
                     c.selected = false;
                     c.SelectionChanged();
                 }
+                c.lbl.Content = "A";
             }
         }
 
@@ -432,129 +637,6 @@ namespace SudokuSolver
             cell88.Fix(9);
         }
 
-        void ResetSudoku()
-        {
-            //Save cells in arrays
-            #region Recuadro 11
-            array11[0, 0] = cell00;
-            array11[0, 1] = cell01;
-            array11[0, 2] = cell02;
-            array11[1, 0] = cell10;
-            array11[1, 1] = cell11;
-            array11[1, 2] = cell12;
-            array11[2, 0] = cell20;
-            array11[2, 1] = cell21;
-            array11[2, 2] = cell22;
-            #endregion
-            #region Recuadro 12
-            array12[0, 0] = cell03;
-            array12[0, 1] = cell04;
-            array12[0, 2] = cell05;
-            array12[1, 0] = cell13;
-            array12[1, 1] = cell14;
-            array12[1, 2] = cell15;
-            array12[2, 0] = cell23;
-            array12[2, 1] = cell24;
-            array12[2, 2] = cell25;
-            #endregion
-            #region Recuadro 13
-            array13[0, 0] = cell06;
-            array13[0, 1] = cell07;
-            array13[0, 2] = cell08;
-            array13[1, 0] = cell16;
-            array13[1, 1] = cell17;
-            array13[1, 2] = cell18;
-            array13[2, 0] = cell26;
-            array13[2, 1] = cell27;
-            array13[2, 2] = cell28;
-            #endregion
-            #region Recuadro 21
-            array21[0, 0] = cell30;
-            array21[0, 1] = cell31;
-            array21[0, 2] = cell32;
-            array21[1, 0] = cell40;
-            array21[1, 1] = cell41;
-            array21[1, 2] = cell42;
-            array21[2, 0] = cell50;
-            array21[2, 1] = cell51;
-            array21[2, 2] = cell52;
-            #endregion
-            #region Recuadro 22
-            array22[0, 0] = cell33;
-            array22[0, 1] = cell34;
-            array22[0, 2] = cell35;
-            array22[1, 0] = cell43;
-            array22[1, 1] = cell44;
-            array22[1, 2] = cell45;
-            array22[2, 0] = cell53;
-            array22[2, 1] = cell54;
-            array22[2, 2] = cell55;
-            #endregion
-            #region Recuadro 23
-            array23[0, 0] = cell36;
-            array23[0, 1] = cell37;
-            array23[0, 2] = cell38;
-            array23[1, 0] = cell46;
-            array23[1, 1] = cell47;
-            array23[1, 2] = cell48;
-            array23[2, 0] = cell56;
-            array23[2, 1] = cell57;
-            array23[2, 2] = cell58;
-            #endregion
-            #region Recuadro 31
-            array31[0, 0] = cell60;
-            array31[0, 1] = cell61;
-            array31[0, 2] = cell62;
-            array31[1, 0] = cell70;
-            array31[1, 1] = cell71;
-            array31[1, 2] = cell72;
-            array31[2, 0] = cell80;
-            array31[2, 1] = cell81;
-            array31[2, 2] = cell82;
-            #endregion
-            #region Recuadro 32
-            array32[0, 0] = cell63;
-            array32[0, 1] = cell64;
-            array32[0, 2] = cell65;
-            array32[1, 0] = cell73;
-            array32[1, 1] = cell74;
-            array32[1, 2] = cell75;
-            array32[2, 0] = cell83;
-            array32[2, 1] = cell84;
-            array32[2, 2] = cell85;
-            #endregion
-            #region Recuadro 33
-            array33[0, 0] = cell66;
-            array33[0, 1] = cell67;
-            array33[0, 2] = cell68;
-            array33[1, 0] = cell76;
-            array33[1, 1] = cell77;
-            array33[1, 2] = cell78;
-            array33[2, 0] = cell86;
-            array33[2, 1] = cell87;
-            array33[2, 2] = cell88;
-            #endregion
-            //Save every cell
-            cellsArray = new Cell[9, 9];
-            int contCol = 0;
-            int contRow = 0;
-            foreach (Cell item in g.Children)
-            {
-                //Save in array
-                cellsArray[contRow, contCol] = item;
-                contCol++;
-                if (contCol == 9)
-                {
-                    contCol = 0;
-                    contRow++;
-                }
-            }
-            ui = new UpdateInterface(UpdateCellNumber);
-            id = new InterfaceDebug(InterfaceDebugger);
-            Descartes = new HashSet<int>();
-            arrays = new List<Cell[,]> { array11, array12, array13, array21, array22, array23, array31, array32, array33 };
-        }
-
         void CheckCell(Cell c)
         {
             selectedCell = c;
@@ -640,13 +722,14 @@ namespace SudokuSolver
 
         private void showMe_Click(object sender, RoutedEventArgs e)
         {
+            Console.WriteLine("");
             foreach (Cell cell in cellsArray)
             {
-                Console.WriteLine("");
-                foreach (int n in cell.Possible)
-                {
-                    Console.Write(n+" ");
-                }
+                //foreach (int n in cell.Possible)
+                //{
+                //    Console.Write(n+" ");
+                //}
+                Console.Write(cell.lbl.Content + " ");
             }
         }
 

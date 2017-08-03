@@ -8,7 +8,7 @@
              d:DesignHeight="50" d:DesignWidth="50">
     <Grid x:Name="grid" Background="White" Width="50" Height="50">
         <Border BorderBrush="Black" BorderThickness="0.5">
-            <Label x:Name="lbl" Content="9" FontSize="35" Margin="2,0,2,0" HorizontalAlignment="Center" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="0" MouseDown="lbl_MouseDown" />
+            <Label x:Name="lbl" Content="9" FontSize="35" Margin="2,0,2,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="0" MouseDown="lbl_MouseDown" />
         </Border>
     </Grid>
 </UserControl>
