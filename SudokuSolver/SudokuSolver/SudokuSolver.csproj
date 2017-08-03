@@ -54,6 +54,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Box.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Cell.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -67,6 +71,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AuxObj.cs" />
+    <Compile Include="Box.xaml.cs">
+      <DependentUpon>Box.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Cell.xaml.cs">
       <DependentUpon>Cell.xaml</DependentUpon>
     </Compile>

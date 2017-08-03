@@ -49,3 +49,5 @@ C:\Users\Usuario\Documents\GitHub\SudokuSolver-WPF\SudokuSolver\SudokuSolver\obj
 C:\Users\Usuario\Documents\GitHub\SudokuSolver-WPF\SudokuSolver\SudokuSolver\obj\Debug\SudokuSolver.g.resources
 C:\Users\Usuario\Documents\GitHub\SudokuSolver-WPF\SudokuSolver\SudokuSolver\obj\Debug\SudokuSolver.Properties.Resources.resources
 C:\Users\Usuario\Documents\GitHub\SudokuSolver-WPF\SudokuSolver\SudokuSolver\obj\Debug\SudokuSolver.csproj.GenerateResource.Cache
+C:\Users\ismaelci\Documents\GitHub\SudokuSolver-WPF\SudokuSolver\SudokuSolver\obj\Debug\Box.g.cs
+C:\Users\ismaelci\Documents\GitHub\SudokuSolver-WPF\SudokuSolver\SudokuSolver\obj\Debug\Box.baml
