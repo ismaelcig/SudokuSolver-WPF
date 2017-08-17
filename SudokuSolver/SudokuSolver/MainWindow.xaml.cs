@@ -21,20 +21,9 @@ namespace SudokuSolver
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static MainWindow mw;
         //public static List<Cell> cells;//List containing all the cells
         public static Cell[,] cellsArray;//Array containing all the cells in position
-        //Cells grouped by position
-        public static Cell[,] array11 = new Cell[3, 3];
-        public static Cell[,] array12 = new Cell[3, 3];
-        public static Cell[,] array13 = new Cell[3, 3];
-        public static Cell[,] array21 = new Cell[3, 3];
-        public static Cell[,] array22 = new Cell[3, 3];
-        public static Cell[,] array23 = new Cell[3, 3];
-        public static Cell[,] array31 = new Cell[3, 3];
-        public static Cell[,] array32 = new Cell[3, 3];
-        public static Cell[,] array33 = new Cell[3, 3];
-
-        public static List<Cell[,]> arrays;
 
         public static Cell selectedCell = null;
         public static bool solved = false;
@@ -52,12 +41,132 @@ namespace SudokuSolver
         delegate void InterfaceDebug();
         InterfaceDebug id;
 
+        delegate void DiscardDelegate();
+        DiscardDelegate dd;
+        delegate void CheckBoxesDel();
+        CheckBoxesDel cb;
+
+        List<Box> boxes = new List<Box>();
+
 
         /*************************************************************************************************************************************************/
         public MainWindow()
         {
             InitializeComponent();
+            //Save every cell
+            cellsArray = new Cell[9, 9];
+            //TODO: Find another way to do this
+            #region FillCellsArray
+            //Box00
+            cellsArray[0, 0] = Sudoku.box00.array[0, 0];
+            cellsArray[0, 1] = Sudoku.box00.array[0, 1];
+            cellsArray[0, 2] = Sudoku.box00.array[0, 2];
+            cellsArray[1, 0] = Sudoku.box00.array[1, 0];
+            cellsArray[1, 1] = Sudoku.box00.array[1, 1];
+            cellsArray[1, 2] = Sudoku.box00.array[1, 2];
+            cellsArray[2, 0] = Sudoku.box00.array[2, 0];
+            cellsArray[2, 1] = Sudoku.box00.array[2, 1];
+            cellsArray[2, 2] = Sudoku.box00.array[2, 2];
+            //Box01
+            cellsArray[0, 3] = Sudoku.box01.array[0, 0];
+            cellsArray[0, 4] = Sudoku.box01.array[0, 1];
+            cellsArray[0, 5] = Sudoku.box01.array[0, 2];
+            cellsArray[1, 3] = Sudoku.box01.array[1, 0];
+            cellsArray[1, 4] = Sudoku.box01.array[1, 1];
+            cellsArray[1, 5] = Sudoku.box01.array[1, 2];
+            cellsArray[2, 3] = Sudoku.box01.array[2, 0];
+            cellsArray[2, 4] = Sudoku.box01.array[2, 1];
+            cellsArray[2, 5] = Sudoku.box01.array[2, 2];
+            //Box02
+            cellsArray[0, 6] = Sudoku.box02.array[0, 0];
+            cellsArray[0, 7] = Sudoku.box02.array[0, 1];
+            cellsArray[0, 8] = Sudoku.box02.array[0, 2];
+            cellsArray[1, 6] = Sudoku.box02.array[1, 0];
+            cellsArray[1, 7] = Sudoku.box02.array[1, 1];
+            cellsArray[1, 8] = Sudoku.box02.array[1, 2];
+            cellsArray[2, 6] = Sudoku.box02.array[2, 0];
+            cellsArray[2, 7] = Sudoku.box02.array[2, 1];
+            cellsArray[2, 8] = Sudoku.box02.array[2, 2];
+
+            //Box10
+            cellsArray[3, 0] = Sudoku.box10.array[0, 0];
+            cellsArray[3, 1] = Sudoku.box10.array[0, 1];
+            cellsArray[3, 2] = Sudoku.box10.array[0, 2];
+            cellsArray[4, 0] = Sudoku.box10.array[1, 0];
+            cellsArray[4, 1] = Sudoku.box10.array[1, 1];
+            cellsArray[4, 2] = Sudoku.box10.array[1, 2];
+            cellsArray[5, 0] = Sudoku.box10.array[2, 0];
+            cellsArray[5, 1] = Sudoku.box10.array[2, 1];
+            cellsArray[5, 2] = Sudoku.box10.array[2, 2];
+            //Box11
+            cellsArray[3, 3] = Sudoku.box11.array[0, 0];
+            cellsArray[3, 4] = Sudoku.box11.array[0, 1];
+            cellsArray[3, 5] = Sudoku.box11.array[0, 2];
+            cellsArray[4, 3] = Sudoku.box11.array[1, 0];
+            cellsArray[4, 4] = Sudoku.box11.array[1, 1];
+            cellsArray[4, 5] = Sudoku.box11.array[1, 2];
+            cellsArray[5, 3] = Sudoku.box11.array[2, 0];
+            cellsArray[5, 4] = Sudoku.box11.array[2, 1];
+            cellsArray[5, 5] = Sudoku.box11.array[2, 2];
+            //Box12
+            cellsArray[3, 6] = Sudoku.box12.array[0, 0];
+            cellsArray[3, 7] = Sudoku.box12.array[0, 1];
+            cellsArray[3, 8] = Sudoku.box12.array[0, 2];
+            cellsArray[4, 6] = Sudoku.box12.array[1, 0];
+            cellsArray[4, 7] = Sudoku.box12.array[1, 1];
+            cellsArray[4, 8] = Sudoku.box12.array[1, 2];
+            cellsArray[5, 6] = Sudoku.box12.array[2, 0];
+            cellsArray[5, 7] = Sudoku.box12.array[2, 1];
+            cellsArray[5, 8] = Sudoku.box12.array[2, 2];
+
+            //Box20
+            cellsArray[6, 0] = Sudoku.box20.array[0, 0];
+            cellsArray[6, 1] = Sudoku.box20.array[0, 1];
+            cellsArray[6, 2] = Sudoku.box20.array[0, 2];
+            cellsArray[7, 0] = Sudoku.box20.array[1, 0];
+            cellsArray[7, 1] = Sudoku.box20.array[1, 1];
+            cellsArray[7, 2] = Sudoku.box20.array[1, 2];
+            cellsArray[8, 0] = Sudoku.box20.array[2, 0];
+            cellsArray[8, 1] = Sudoku.box20.array[2, 1];
+            cellsArray[8, 2] = Sudoku.box20.array[2, 2];
+            //Box21
+            cellsArray[6, 3] = Sudoku.box21.array[0, 0];
+            cellsArray[6, 4] = Sudoku.box21.array[0, 1];
+            cellsArray[6, 5] = Sudoku.box21.array[0, 2];
+            cellsArray[7, 3] = Sudoku.box21.array[1, 0];
+            cellsArray[7, 4] = Sudoku.box21.array[1, 1];
+            cellsArray[7, 5] = Sudoku.box21.array[1, 2];
+            cellsArray[8, 3] = Sudoku.box21.array[2, 0];
+            cellsArray[8, 4] = Sudoku.box21.array[2, 1];
+            cellsArray[8, 5] = Sudoku.box21.array[2, 2];
+            //Box22
+            cellsArray[6, 6] = Sudoku.box22.array[0, 0];
+            cellsArray[6, 7] = Sudoku.box22.array[0, 1];
+            cellsArray[6, 8] = Sudoku.box22.array[0, 2];
+            cellsArray[7, 6] = Sudoku.box22.array[1, 0];
+            cellsArray[7, 7] = Sudoku.box22.array[1, 1];
+            cellsArray[7, 8] = Sudoku.box22.array[1, 2];
+            cellsArray[8, 6] = Sudoku.box22.array[2, 0];
+            cellsArray[8, 7] = Sudoku.box22.array[2, 1];
+            cellsArray[8, 8] = Sudoku.box22.array[2, 2];
+            #endregion
+            //Comprobación:
+            //int a = 0;
+            //foreach (Cell item in cellsArray)
+            //{
+            //    item.lbl.Content = a.ToString();
+            //    a++;
+            //}
+            ui = new UpdateInterface(UpdateCellNumber);
+            id = new InterfaceDebug(InterfaceDebugger);
+            //dd = new DiscardDelegate(Descartar);
+            cb = new CheckBoxesDel(CheckBoxes);
+            foreach (Box box in Sudoku.SudokuGrid.Children)
+            {
+                boxes.Add(box);
+            }
             ResetSudoku();
+            mw = this;
         }
 #region Delegates
         void UpdateCellNumber()
@@ -90,7 +199,24 @@ namespace SudokuSolver
                 selectedCell.Opacity = 1;
             }
         }
-#endregion
+
+        void CheckBoxes()
+        {
+            foreach (Box box in Sudoku.SudokuGrid.Children)
+            {
+                foreach (Cell cell in box.array)
+                {
+                    LoadAuxObjList(cell);
+                }
+                CheckAuxObjList();
+            }
+        }
+        #endregion
+
+        void ResetSudoku()
+        {
+            Descartes = new HashSet<int>();
+        }
 
         public static void Unselect()
         {
@@ -114,7 +240,7 @@ namespace SudokuSolver
             {
                 selectedCell.Reset();
             }
-            else if (!selectedCell.Fixed)
+            else if (!selectedCell.Fixed && !selectedCell.Solved)
             {
                 int keyVal = (int)e.Key;
                 int value = -1;
@@ -128,7 +254,7 @@ namespace SudokuSolver
                 }
                 if (value > 0)
                 {
-                    selectedCell.setNum(value);
+                    selectedCell.writeNum(value);
                 }
             }
         }
@@ -157,103 +283,16 @@ namespace SudokuSolver
             while (!solved)
             {
                 Descartar();
-
+                //Dispatcher.Invoke(dd);
                 #region CheckPossibles
                 //if (contChanges == 0)
                 //{
                 //Si después de todo lo anterior, el programa ya no es capaz de seguir descartando posibilidades,
-                 //busca si en alguna Row/Col/Box hay algún nº que sólo es posible colocarlo en una celda concreta
-                    #region CheckBoxes
-                    //TODO: Refactoriza esto, pls
-                    for (int c = 0; c < 3; c++)
-                    {//Dentro de esa Box, recorre Row
-                        for (int d = 0; d < 3; d++)
-                        {//Recorre Col dentro de esa Box -> Celda a Celda
-                            LoadAuxObjList(array11[c, d]);
-                        }
-                    }
-                    CheckAuxObjList();
-                    for (int c = 0; c < 3; c++)
-                    {//Dentro de esa Box, recorre Row
-                        for (int d = 0; d < 3; d++)
-                        {//Recorre Col dentro de esa Box -> Celda a Celda
-                            LoadAuxObjList(array12[c, d]);
-                        }
-                    }
-                    CheckAuxObjList();
-                    for (int c = 0; c < 3; c++)
-                    {//Dentro de esa Box, recorre Row
-                        for (int d = 0; d < 3; d++)
-                        {//Recorre Col dentro de esa Box -> Celda a Celda
-                            LoadAuxObjList(array13[c, d]);
-                        }
-                    }
-                    CheckAuxObjList();
-                    for (int c = 0; c < 3; c++)
-                    {//Dentro de esa Box, recorre Row
-                        for (int d = 0; d < 3; d++)
-                        {//Recorre Col dentro de esa Box -> Celda a Celda
-                            LoadAuxObjList(array21[c, d]);
-                        }
-                    }
-                    CheckAuxObjList();
-                    for (int c = 0; c < 3; c++)
-                    {//Dentro de esa Box, recorre Row
-                        for (int d = 0; d < 3; d++)
-                        {//Recorre Col dentro de esa Box -> Celda a Celda
-                            LoadAuxObjList(array22[c, d]);
-                        }
-                    }
-                    CheckAuxObjList();
-                    for (int c = 0; c < 3; c++)
-                    {//Dentro de esa Box, recorre Row
-                        for (int d = 0; d < 3; d++)
-                        {//Recorre Col dentro de esa Box -> Celda a Celda
-                            LoadAuxObjList(array23[c, d]);
-                        }
-                    }
-                    CheckAuxObjList();
-                    for (int c = 0; c < 3; c++)
-                    {//Dentro de esa Box, recorre Row
-                        for (int d = 0; d < 3; d++)
-                        {//Recorre Col dentro de esa Box -> Celda a Celda
-                            LoadAuxObjList(array31[c, d]);
-                        }
-                    }
-                    CheckAuxObjList();
-                    for (int c = 0; c < 3; c++)
-                    {//Dentro de esa Box, recorre Row
-                        for (int d = 0; d < 3; d++)
-                        {//Recorre Col dentro de esa Box -> Celda a Celda
-                            LoadAuxObjList(array32[c, d]);
-                        }
-                    }
-                    CheckAuxObjList();
-                    for (int c = 0; c < 3; c++)
-                    {//Dentro de esa Box, recorre Row
-                        for (int d = 0; d < 3; d++)
-                        {//Recorre Col dentro de esa Box -> Celda a Celda
-                            LoadAuxObjList(array33[c, d]);
-                        }
-                    }
-                    CheckAuxObjList();
-
-
-                    //foreach (Cell[,] item in arrays)
-                    //{
-                    //    //auxObjList = new List<AuxObj>();
-                    //    for (int i = 0; i < 3; i++)
-                    //    {
-                    //        for (int j = 0; j < 3; j++)
-                    //        {
-                    //            LoadAuxObjList(cellsArray[i, j]);
-                    //        }
-                    //    }
-                    //    CheckAuxObjList();
-                    //}
-                    #endregion
-                    #region CheckRows
-                    for (int i = 0; i < 9; i++)
+                //busca si en alguna Row/Col/Box hay algún nº que sólo es posible colocarlo en una celda concreta
+                //CheckBoxes
+                Dispatcher.Invoke(cb);
+                //CheckRows
+                for (int i = 0; i < 9; i++)
                     {
                         for (int j = 0; j < 9; j++)
                         {
@@ -261,8 +300,7 @@ namespace SudokuSolver
                         }
                         CheckAuxObjList();
                     }
-                    #endregion
-                    #region CheckCols
+                    //CheckCols
                     for (int i = 0; i < 9; i++)
                     {
                         for (int j = 0; j < 9; j++)
@@ -271,15 +309,30 @@ namespace SudokuSolver
                         }
                         CheckAuxObjList();
                     }
-                    #endregion
                 //}
                 #endregion
-
-                var result = MessageBox.Show("Keep finding solution?", "", MessageBoxButton.YesNo);
-                if (result == MessageBoxResult.No)
+                int unsolvedCells = 81;
+                foreach (Cell cell in cellsArray)
                 {
+                    if (cell.Solved || cell.Fixed)
+                    {
+                        unsolvedCells--;
+                    }
+                }
+                if (unsolvedCells > 0)
+                {
+                    var result = MessageBox.Show("Keep finding solution?", "" + unsolvedCells + " unsolved cells", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.No)
+                    {
+                        solved = true;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Solved");
                     solved = true;
                 }
+                
             }
         }
 
@@ -289,19 +342,30 @@ namespace SudokuSolver
             {
                 contChanges = 0;//Para saber cuando el programa ya no es capaz de descartar más nº posibles
                 #region Boxes
-                foreach (Cell[,] item in arrays)
+
+                foreach (Box box in boxes)
+                {
+                    Descartes = new HashSet<int>();
+                    do
                     {
-                        Descartes = new HashSet<int>();
-                        do
+                        somethingChanged = false;
+                        for (int i = 0; i < 3; i++)
                         {
-                            somethingChanged = false;
-                            for (int i = 0; i < 3; i++)
+                            for (int j = 0; j < 3; j++)
                             {
-                                for (int j = 0; j < 3; j++)
-                                {
-                                    selectedCell = item[i, j];
-                                    if (selectedCell.Fixed || selectedCell.Solved)
-                                    {//Una celda fija
+                                selectedCell = box.array[i, j];
+                                if (selectedCell.Fixed || selectedCell.Solved)
+                                {//Una celda fija
+                                    if (!Descartes.Contains(selectedCell.Num))
+                                    {
+                                        Descartes.Add(selectedCell.Num);
+                                        somethingChanged = true;
+                                    }
+                                }
+                                else
+                                {//Es una celda no fija
+                                    if (selectedCell.Num > 0)
+                                    {//Tiene un nº
                                         if (!Descartes.Contains(selectedCell.Num))
                                         {
                                             Descartes.Add(selectedCell.Num);
@@ -309,40 +373,31 @@ namespace SudokuSolver
                                         }
                                     }
                                     else
-                                    {//Es una celda no fija
-                                        if (selectedCell.Num > 0)
-                                        {//Tiene un nº
-                                            if (!Descartes.Contains(selectedCell.Num))
+                                    {//Hay que hallar el nº
+                                        foreach (int n in Descartes)
+                                        {//Quita los descartes de la lista de posibilidades
+                                            if (selectedCell.Possible.Contains(n))
                                             {
-                                                Descartes.Add(selectedCell.Num);
-                                                somethingChanged = true;
-                                            }
-                                        }
-                                        else
-                                        {//Hay que hallar el nº
-                                            foreach (int n in Descartes)
-                                            {//Quita los descartes de la lista de posibilidades
-                                                if (selectedCell.Possible.Contains(n))
-                                                {
-                                                    selectedCell.Possible.Remove(n);
-                                                    somethingChanged = true;
-                                                    contChanges++;
-                                                }
-                                            }
-                                            if (selectedCell.Possible.Count == 1)
-                                            {
-                                                aux = selectedCell.Possible[0];
+                                                selectedCell.Possible.Remove(n);
                                                 somethingChanged = true;
                                                 contChanges++;
                                             }
                                         }
+                                        if (selectedCell.Possible.Count == 1)
+                                        {
+                                            aux = selectedCell.Possible[0];
+                                            somethingChanged = true;
+                                            contChanges++;
+                                        }
                                     }
-                                    Dispatcher.Invoke(ui);
                                 }
+                                Dispatcher.Invoke(ui);
                             }
-                        } while (somethingChanged);
-                    }
-                    #endregion
+                        }
+                    } while (somethingChanged);
+
+                }
+                #endregion
                 Descartes = new HashSet<int>();
                 #region Rows
                 for (int i = 0; i < 9; i++)
@@ -401,158 +456,35 @@ namespace SudokuSolver
 
         private void button_Click(object sender, RoutedEventArgs e)
         {//Fills with a Sudoku example
-            cell00.Fix(5);
-            cell01.Fix(3);
-            cell04.Fix(7);
-            cell10.Fix(6);
-            cell13.Fix(1);
-            cell14.Fix(9);
-            cell15.Fix(5);
-            cell21.Fix(9);
-            cell22.Fix(8);
-            cell27.Fix(6);
-            cell30.Fix(8);
-            cell34.Fix(6);
-            cell38.Fix(3);
-            cell40.Fix(4);
-            cell43.Fix(8);
-            cell45.Fix(3);
-            cell48.Fix(1);
-            cell50.Fix(7);
-            cell54.Fix(2);
-            cell58.Fix(6);
-            cell61.Fix(6);
-            cell66.Fix(2);
-            cell67.Fix(8);
-            cell73.Fix(4);
-            cell75.Fix(9);
-            cell78.Fix(5);
-            cell84.Fix(8);
-            cell87.Fix(7);
-            cell88.Fix(9);
-        }
-
-        void ResetSudoku()
-        {
-            //Save cells in arrays
-            #region Recuadro 11
-            array11[0, 0] = cell00;
-            array11[0, 1] = cell01;
-            array11[0, 2] = cell02;
-            array11[1, 0] = cell10;
-            array11[1, 1] = cell11;
-            array11[1, 2] = cell12;
-            array11[2, 0] = cell20;
-            array11[2, 1] = cell21;
-            array11[2, 2] = cell22;
-            #endregion
-            #region Recuadro 12
-            array12[0, 0] = cell03;
-            array12[0, 1] = cell04;
-            array12[0, 2] = cell05;
-            array12[1, 0] = cell13;
-            array12[1, 1] = cell14;
-            array12[1, 2] = cell15;
-            array12[2, 0] = cell23;
-            array12[2, 1] = cell24;
-            array12[2, 2] = cell25;
-            #endregion
-            #region Recuadro 13
-            array13[0, 0] = cell06;
-            array13[0, 1] = cell07;
-            array13[0, 2] = cell08;
-            array13[1, 0] = cell16;
-            array13[1, 1] = cell17;
-            array13[1, 2] = cell18;
-            array13[2, 0] = cell26;
-            array13[2, 1] = cell27;
-            array13[2, 2] = cell28;
-            #endregion
-            #region Recuadro 21
-            array21[0, 0] = cell30;
-            array21[0, 1] = cell31;
-            array21[0, 2] = cell32;
-            array21[1, 0] = cell40;
-            array21[1, 1] = cell41;
-            array21[1, 2] = cell42;
-            array21[2, 0] = cell50;
-            array21[2, 1] = cell51;
-            array21[2, 2] = cell52;
-            #endregion
-            #region Recuadro 22
-            array22[0, 0] = cell33;
-            array22[0, 1] = cell34;
-            array22[0, 2] = cell35;
-            array22[1, 0] = cell43;
-            array22[1, 1] = cell44;
-            array22[1, 2] = cell45;
-            array22[2, 0] = cell53;
-            array22[2, 1] = cell54;
-            array22[2, 2] = cell55;
-            #endregion
-            #region Recuadro 23
-            array23[0, 0] = cell36;
-            array23[0, 1] = cell37;
-            array23[0, 2] = cell38;
-            array23[1, 0] = cell46;
-            array23[1, 1] = cell47;
-            array23[1, 2] = cell48;
-            array23[2, 0] = cell56;
-            array23[2, 1] = cell57;
-            array23[2, 2] = cell58;
-            #endregion
-            #region Recuadro 31
-            array31[0, 0] = cell60;
-            array31[0, 1] = cell61;
-            array31[0, 2] = cell62;
-            array31[1, 0] = cell70;
-            array31[1, 1] = cell71;
-            array31[1, 2] = cell72;
-            array31[2, 0] = cell80;
-            array31[2, 1] = cell81;
-            array31[2, 2] = cell82;
-            #endregion
-            #region Recuadro 32
-            array32[0, 0] = cell63;
-            array32[0, 1] = cell64;
-            array32[0, 2] = cell65;
-            array32[1, 0] = cell73;
-            array32[1, 1] = cell74;
-            array32[1, 2] = cell75;
-            array32[2, 0] = cell83;
-            array32[2, 1] = cell84;
-            array32[2, 2] = cell85;
-            #endregion
-            #region Recuadro 33
-            array33[0, 0] = cell66;
-            array33[0, 1] = cell67;
-            array33[0, 2] = cell68;
-            array33[1, 0] = cell76;
-            array33[1, 1] = cell77;
-            array33[1, 2] = cell78;
-            array33[2, 0] = cell86;
-            array33[2, 1] = cell87;
-            array33[2, 2] = cell88;
-            #endregion
-            //Save every cell
-            cellsArray = new Cell[9, 9];
-            int contCol = 0;
-            int contRow = 0;
-            foreach (Cell item in g.Children)
-            {
-                //Save in array
-                cellsArray[contRow, contCol] = item;
-                contCol++;
-                if (contCol == 9)
-                {
-                    contCol = 0;
-                    contRow++;
-                }
-            }
-            ui = new UpdateInterface(UpdateCellNumber);
-            id = new InterfaceDebug(InterfaceDebugger);
-            Descartes = new HashSet<int>();
-            arrays = new List<Cell[,]> { array11, array12, array13, array21, array22, array23, array31, array32, array33 };
+            cellsArray[0, 0].Fix(5);
+            cellsArray[0, 1].Fix(3);
+            cellsArray[0, 4].Fix(7);
+            cellsArray[1, 0].Fix(6);
+            cellsArray[1, 3].Fix(1);
+            cellsArray[1, 4].Fix(9);
+            cellsArray[1, 5].Fix(5);
+            cellsArray[2, 1].Fix(9);
+            cellsArray[2, 2].Fix(8);
+            cellsArray[2, 7].Fix(6);
+            cellsArray[3, 0].Fix(8);
+            cellsArray[3, 4].Fix(6);
+            cellsArray[3, 8].Fix(3);
+            cellsArray[4, 0].Fix(4);
+            cellsArray[4, 3].Fix(8);
+            cellsArray[4, 5].Fix(3);
+            cellsArray[4, 8].Fix(1);
+            cellsArray[5, 0].Fix(7);
+            cellsArray[5, 4].Fix(2);
+            cellsArray[5, 8].Fix(6);
+            cellsArray[6, 1].Fix(6);
+            cellsArray[6, 6].Fix(2);
+            cellsArray[6, 7].Fix(8);
+            cellsArray[7, 3].Fix(4);
+            cellsArray[7, 5].Fix(9);
+            cellsArray[7, 8].Fix(5);
+            cellsArray[8, 4].Fix(8);
+            cellsArray[8, 7].Fix(7);
+            cellsArray[8, 8].Fix(9);
         }
 
         void CheckCell(Cell c)
@@ -598,7 +530,8 @@ namespace SudokuSolver
             Dispatcher.Invoke(ui);
         }
 
-        void LoadAuxObjList(Cell c)
+        //Is public so it can be called from Box.CheckBox()
+        public void LoadAuxObjList(Cell c)
         {
             selectedCell = c;
             Dispatcher.Invoke(id);
@@ -621,7 +554,8 @@ namespace SudokuSolver
             Dispatcher.Invoke(id);
         }
 
-        void CheckAuxObjList()
+        //Is public so it can be called from Box.CheckBox()
+        public void CheckAuxObjList()
         {//Cuando acaba de recorrer una Row/Col/Box
             foreach (AuxObj aobj in auxObjList)
             {
@@ -633,25 +567,10 @@ namespace SudokuSolver
                     Dispatcher.Invoke(ui);
                     //Cuando descubre algún número, debería mirar qué cosas puede descartar
                     Descartar();
+                    //Dispatcher.Invoke(dd);
                 }
             }
             auxObjList = new List<AuxObj>();
         }
-
-        private void showMe_Click(object sender, RoutedEventArgs e)
-        {
-            foreach (Cell cell in cellsArray)
-            {
-                Console.WriteLine("");
-                foreach (int n in cell.Possible)
-                {
-                    Console.Write(n+" ");
-                }
-            }
-        }
-
-        //Debo ir comprobando las listas de Posibles
-        //En caso de que un nº aparezca una única vez como posible en toda la Row/Col/Box
-        //SetNum
     }
 }

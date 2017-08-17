@@ -57,6 +57,14 @@ namespace SudokuSolver
             }
         }
 
+        public void writeNum(int n)
+        {//Writes user input
+            Num = n;
+            lbl.FontSize = 35;
+            lbl.Content = n.ToString();
+        }
+
+
         public void setNum(int n)
         {
             Num = n;
@@ -87,9 +95,10 @@ namespace SudokuSolver
 
         public void Fix(int n)
         {
-            Fixed = true;
             grid.Background = Brushes.SandyBrown;
             setNum(n);
+            Solved = false;
+            Fixed = true;
             Possible.Clear();
             Possible.Add(n);
         }
@@ -117,7 +126,7 @@ namespace SudokuSolver
             }
         }
 
-        private void lbl_MouseDown(object sender, MouseButtonEventArgs e)
+        private void cell_MouseDown(object sender, MouseButtonEventArgs e)
         {//Click Event
             //Deselect other cells
             MainWindow.Unselect();
