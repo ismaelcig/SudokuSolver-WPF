@@ -168,25 +168,30 @@ namespace SudokuSolver
         {//Click Event
             if (!MainWindow.working)
             {//If the program isn't solving the sudoku, allow the user to do whatever he wants
-                //Unselect selected Cell
-                try
-                {
-                    MainWindow.selectedCell.selected = false;
-                    MainWindow.selectedCell.SelectionChanged();
-                }
-                catch (Exception ex)
-                {
-                    //Will throw the first time, when selected cell is still null
-                }
-                //Mark this as selected
-                MainWindow.selectedCell = this;
-                selected = true;
-                SelectionChanged();
+                Select();
             }
             else
             {
                 MessageBox.Show("The program is running");
             }
+        }
+
+        public void Select()
+        {
+            //Unselect selected Cell
+            try
+            {
+                MainWindow.selectedCell.selected = false;
+                MainWindow.selectedCell.SelectionChanged();
+            }
+            catch (Exception ex)
+            {
+                //Will throw the first time, when selected cell is still null
+            }
+            //Mark this as selected
+            MainWindow.selectedCell = this;
+            selected = true;
+            SelectionChanged();
         }
     }
 }
