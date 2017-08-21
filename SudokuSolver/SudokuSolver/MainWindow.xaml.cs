@@ -24,10 +24,12 @@ namespace SudokuSolver
         public static MainWindow mw;
         //public static List<Cell> cells;//List containing all the cells
         public static Cell[,] cellsArray;//Array containing all the cells in position
+        public static Cell[,] auxArray;//Array to save state of the Sudoku before trying random numbers
 
         public static Cell selectedCell = null;
         public static bool solved = false;
         HashSet<int> Descartes;
+        List<int> UsedNumbers;//Use this in place of Descartes(?)
 
         Thread t;
         delegate void UpdateInterface();
@@ -41,13 +43,17 @@ namespace SudokuSolver
         delegate void InterfaceDebug();
         InterfaceDebug id;
 
-        delegate void DiscardDelegate();
-        DiscardDelegate dd;
+        //delegate void DiscardDelegate();
+        //DiscardDelegate dd;
         delegate void CheckBoxesDel();
         CheckBoxesDel cb;
 
         List<Box> boxes = new List<Box>();
 
+        bool error = false;//Bool to know if the Sudoku gave an error (Has no solution)
+        //public static List<State> states;
+        //State prevState = null;
+        //bool refreshing = false;
 
         /*************************************************************************************************************************************************/
         public MainWindow()
@@ -55,6 +61,7 @@ namespace SudokuSolver
             InitializeComponent();
             //Save every cell
             cellsArray = new Cell[9, 9];
+            auxArray = new Cell[9, 9];
             //TODO: Find another way to do this
             #region FillCellsArray
             //Box00
@@ -165,6 +172,7 @@ namespace SudokuSolver
             {
                 boxes.Add(box);
             }
+            stateComboBox.DisplayMemberPath = "Name";
             ResetSudoku();
             mw = this;
         }
@@ -216,6 +224,8 @@ namespace SudokuSolver
         void ResetSudoku()
         {
             Descartes = new HashSet<int>();
+            error = false;
+            //states = new List<State>();
         }
 
         public static void Unselect()
@@ -232,29 +242,32 @@ namespace SudokuSolver
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {//Sólo se pueden pulsar números
-            if (e.Key == Key.Escape)
+            if (selectedCell != null)
             {
-                Application.Current.Shutdown();
-            }
-            else if (e.Key == Key.Delete)
-            {
-                selectedCell.Reset();
-            }
-            else if (!selectedCell.Fixed && !selectedCell.Solved)
-            {
-                int keyVal = (int)e.Key;
-                int value = -1;
-                if (keyVal >= (int)Key.D0 && keyVal <= (int)Key.D9)
+                if (e.Key == Key.Escape)
                 {
-                    value = (int)e.Key - (int)Key.D0;
+                    Application.Current.Shutdown();
                 }
-                else if (keyVal >= (int)Key.NumPad0 && keyVal <= (int)Key.NumPad9)
+                else if (e.Key == Key.Delete)
                 {
-                    value = (int)e.Key - (int)Key.NumPad0;
+                    selectedCell.Reset();
                 }
-                if (value > 0)
+                else if (!selectedCell.Fixed && !selectedCell.Solved)
                 {
-                    selectedCell.writeNum(value);
+                    int keyVal = (int)e.Key;
+                    int value = -1;
+                    if (keyVal >= (int)Key.D0 && keyVal <= (int)Key.D9)
+                    {
+                        value = (int)e.Key - (int)Key.D0;
+                    }
+                    else if (keyVal >= (int)Key.NumPad0 && keyVal <= (int)Key.NumPad9)
+                    {
+                        value = (int)e.Key - (int)Key.NumPad0;
+                    }
+                    if (value > 0)
+                    {
+                        selectedCell.writeNum(value);
+                    }
                 }
             }
         }
@@ -277,6 +290,11 @@ namespace SudokuSolver
             //Mientras no lo haya resuelto, intenta llegar a una solución
         }
 
+
+
+        /******************************************************************************************************/
+        //                                          MAIN METHODS                                              //
+        /******************************************************************************************************/
         void Solve()
         {
             bool solved = false;
@@ -438,8 +456,78 @@ namespace SudokuSolver
                 }
                 #endregion
             }
-            
+
         }
+
+        void CheckError()//TODO: Está sin hacer
+        {//This method will Check if the Sudoku is correct
+            //Check for duplicates
+            #region Boxes
+            foreach (Box box in boxes)
+            {
+                UsedNumbers = new List<int>();
+                do
+                {
+                    //somethingChanged = false;
+                    for (int i = 0; i < 3; i++)
+                    {
+                        for (int j = 0; j < 3; j++)
+                        {
+                            selectedCell = box.array[i, j];
+                            
+                            Dispatcher.Invoke(ui);
+                        }
+                    }
+                } while (somethingChanged);
+
+            }
+            #endregion
+            Descartes = new HashSet<int>();
+            #region Rows
+            for (int i = 0; i < 9; i++)
+            {
+                for (int j = 0; j < 9; j++)
+                {
+                    CheckCell(cellsArray[i, j]);
+                }
+                if (somethingChanged)
+                {//Si algo ha cambiado, vuelve a recorrer la fila
+                    i--;
+                    somethingChanged = false;
+                }
+                else
+                {
+                    Descartes = new HashSet<int>();
+                    //auxObjList = new List<AuxObj>();
+                }
+            }
+            #endregion
+            #region Cols
+            for (int j = 0; j < 9; j++)
+            {
+                for (int i = 0; i < 9; i++)
+                {
+                    CheckCell(cellsArray[i, j]);
+                }
+                if (somethingChanged)
+                {//Si algo ha cambiado, vuelve a recorrer la columna
+                    j--;
+                    somethingChanged = false;
+                }
+                else
+                {
+                    Descartes = new HashSet<int>();
+                    //auxObjList = new List<AuxObj>();
+                }
+            }
+            #endregion
+        }
+
+
+
+        /******************************************************************************************************/
+        //                                      MAIN METHODS END                                              //
+        /******************************************************************************************************/
 
 
 
@@ -456,7 +544,8 @@ namespace SudokuSolver
 
         private void button_Click(object sender, RoutedEventArgs e)
         {//Fills with a Sudoku example
-            cellsArray[0, 0].Fix(5);
+            #region Easy-Normal
+            /*cellsArray[0, 0].Fix(5);
             cellsArray[0, 1].Fix(3);
             cellsArray[0, 4].Fix(7);
             cellsArray[1, 0].Fix(6);
@@ -484,7 +573,37 @@ namespace SudokuSolver
             cellsArray[7, 8].Fix(5);
             cellsArray[8, 4].Fix(8);
             cellsArray[8, 7].Fix(7);
-            cellsArray[8, 8].Fix(9);
+            cellsArray[8, 8].Fix(9);*/
+            #endregion
+            #region Hard
+            cellsArray[0, 1].Fix(1);
+            cellsArray[0, 2].Fix(4);
+            cellsArray[0, 6].Fix(2);
+            cellsArray[0, 8].Fix(7);
+            cellsArray[1, 2].Fix(7);
+            cellsArray[1, 3].Fix(4);
+            cellsArray[1, 5].Fix(9);
+            cellsArray[2, 0].Fix(6);
+            cellsArray[2, 3].Fix(1);
+            cellsArray[2, 4].Fix(7);
+            cellsArray[2, 6].Fix(4);
+            cellsArray[3, 0].Fix(2);
+            cellsArray[3, 6].Fix(9);
+            cellsArray[3, 7].Fix(6);
+            cellsArray[4, 1].Fix(3);
+            cellsArray[4, 2].Fix(6);
+            cellsArray[5, 3].Fix(6);
+            cellsArray[5, 4].Fix(8);
+            cellsArray[5, 8].Fix(4);
+            cellsArray[6, 3].Fix(7);
+            cellsArray[6, 4].Fix(3);
+            cellsArray[6, 7].Fix(8);
+            cellsArray[6, 8].Fix(5);
+            cellsArray[7, 2].Fix(5);
+            cellsArray[7, 5].Fix(8);
+            cellsArray[7, 7].Fix(3);
+            cellsArray[8, 1].Fix(6);
+#endregion
         }
 
         void CheckCell(Cell c)
@@ -529,9 +648,8 @@ namespace SudokuSolver
             }
             Dispatcher.Invoke(ui);
         }
-
-        //Is public so it can be called from Box.CheckBox()
-        public void LoadAuxObjList(Cell c)
+        
+        void LoadAuxObjList(Cell c)
         {
             selectedCell = c;
             Dispatcher.Invoke(id);
@@ -553,9 +671,8 @@ namespace SudokuSolver
             }
             Dispatcher.Invoke(id);
         }
-
-        //Is public so it can be called from Box.CheckBox()
-        public void CheckAuxObjList()
+        
+        void CheckAuxObjList()
         {//Cuando acaba de recorrer una Row/Col/Box
             foreach (AuxObj aobj in auxObjList)
             {
@@ -572,5 +689,68 @@ namespace SudokuSolver
             }
             auxObjList = new List<AuxObj>();
         }
+
+        private void buttSave_Click(object sender, RoutedEventArgs e)
+        {
+            //State state = new State(txtState.Text);
+            //txtState.Clear();
+            //buttSave.Focus();
+            //RefreshCombo();
+        }
+
+        private void stateComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //if (!refreshing)
+            //{
+            //    if (prevState != null)
+            //    {
+            //        prevState.Name = prevState.Time.ToLongTimeString();
+            //    }
+            //    SetState((State)stateComboBox.SelectedItem);
+            //    State state = new State();
+            //    prevState = state;
+            //    RefreshCombo();
+            //}
+        }
+
+        //void SetState(State state)
+        //{
+        //    for (int i = 0; i < 9; i++)
+        //    {
+        //        for (int j = 0; j < 9; j++)
+        //        {
+        //            cellsArray[i, j] = state.Array[i, j];
+        //        }
+        //    }
+        //    string str = String.Concat("Using: ", state.Name);
+        //    str = String.Concat(state.Name, " at " + DateTime.Now);
+        //    state.Name = str;
+        //}
+
+        private void buttUnfix_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (Cell cell in cellsArray)
+            {
+                cell.Solved = false;
+                cell.Fixed = false;
+                cell.selected = false;
+                cell.SelectionChanged();
+            }
+        }
+
+        private void txtState_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            //selectedCell.selected = false;
+            //selectedCell.SelectionChanged();
+            //selectedCell = null;
+            //txtState.Focus();
+        }
+
+        //void RefreshCombo()
+        //{
+        //    refreshing = true;
+        //    stateComboBox.ItemsSource = null;
+        //    stateComboBox.ItemsSource = states;
+        //}
     }
 }

@@ -114,14 +114,21 @@ namespace SudokuSolver
             lbl.Content = "";
             lbl.FontSize = 12;
             int cont = 0;
-            foreach (int item in Possible)
+            for (int i = 1; i < 10; i++)
             {
-                if (cont==3)
+                if (cont == 3)
                 {
                     lbl.Content += "\n";
                     cont = 0;
                 }
-                lbl.Content += item + "  ";
+                if (Possible.Contains(i))
+                {
+                    lbl.Content += i + "  ";
+                }
+                else
+                {
+                    lbl.Content += "   ";
+                }
                 cont++;
             }
         }

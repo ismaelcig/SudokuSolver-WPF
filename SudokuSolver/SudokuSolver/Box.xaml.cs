@@ -37,13 +37,5 @@ namespace SudokuSolver
             array[2, 2] = cell22;
 #endregion
         }
-        //public void CheckBox()
-        //{
-        //    foreach (Cell cell in array)
-        //    {
-        //        MainWindow.mw.LoadAuxObjList(cell);
-        //    }
-        //    MainWindow.mw.CheckAuxObjList();
-        //}
     }
 }
