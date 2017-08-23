@@ -1,0 +1,32 @@
+﻿<UserControl x:Class="SudokuSolver.Sudoku"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SudokuSolver"
+             mc:Ignorable="d" 
+             d:DesignHeight="458" d:DesignWidth="458">
+    <Border BorderBrush="Black" BorderThickness="1" Height="458" Width="458" >
+        <Grid x:Name="SudokuGrid">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="152"/>
+                <ColumnDefinition Width="152"/>
+                <ColumnDefinition Width="152"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="152"/>
+                <RowDefinition Height="152"/>
+                <RowDefinition Height="152"/>
+            </Grid.RowDefinitions>
+            <local:Box x:Name="box00" Grid.Row="0" Grid.Column="0"/>
+            <local:Box x:Name="box01" Grid.Row="0" Grid.Column="1"/>
+            <local:Box x:Name="box02" Grid.Row="0" Grid.Column="2"/>
+            <local:Box x:Name="box10" Grid.Row="1" Grid.Column="0"/>
+            <local:Box x:Name="box11" Grid.Row="1" Grid.Column="1"/>
+            <local:Box x:Name="box12" Grid.Row="1" Grid.Column="2"/>
+            <local:Box x:Name="box20" Grid.Row="2" Grid.Column="0"/>
+            <local:Box x:Name="box21" Grid.Row="2" Grid.Column="1"/>
+            <local:Box x:Name="box22" Grid.Row="2" Grid.Column="2"/>
+        </Grid>
+    </Border>
+</UserControl>

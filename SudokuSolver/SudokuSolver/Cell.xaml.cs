@@ -24,6 +24,8 @@ namespace SudokuSolver
         public int Num;
         public bool Fixed = false;
         public bool Solved = false;
+        public bool Marked = false;
+        public bool Error = false;
         public List<int> Possible;
         public bool selected;
 
@@ -38,12 +40,34 @@ namespace SudokuSolver
             lbl.Content = "";
             Num = -1;
             Unfix();
-            Possible = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            Possible = new List<int>();
+            //Possible = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
             selected = false;
         }
 
         public void SelectionChanged()
         {//Change color when selected/deselected
+            #region Marked
+            //Show as marked when a number is selected
+            if (Marked)
+            {
+                border.BorderBrush = Brushes.Lime;
+                border.BorderThickness = new Thickness(2);
+            }
+            else
+            {
+                border.BorderBrush = Brushes.Black;
+                border.BorderThickness = new Thickness(0.5);
+            }
+            #endregion
+            #region Error
+            //Show nº in red when cell gives error
+            if (Error)
+                lbl.Foreground = Brushes.Red;
+            else
+                lbl.Foreground = Brushes.Black;
+            #endregion
+            #region Background
             if (!Fixed && !Solved)
             {
                 if (selected)
@@ -55,7 +79,31 @@ namespace SudokuSolver
                     grid.Background = Brushes.White;
                 }
             }
+            else if (Fixed)
+            {
+                if (selected)
+                    grid.Background = Brushes.SaddleBrown;
+                else
+                    grid.Background = Brushes.SandyBrown;
+            }
+            else if (Solved)
+            {
+                if (selected)
+                    grid.Background = Brushes.Plum;
+                else
+                    grid.Background = Brushes.Thistle;
+            }
+            #endregion
         }
+
+        public void writeNum(int n)
+        {//Writes user input
+            Num = n;
+            lbl.FontSize = 35;
+            lbl.Content = n.ToString();
+            MainWindow.mw.CheckSudokuError();
+        }
+
 
         public void setNum(int n)
         {
@@ -65,7 +113,8 @@ namespace SudokuSolver
             Solved = true;
             Possible.Clear();
             Possible.Add(n);
-            //TODO: If the number is already on use, set background to red
+            //TODO: Check needed here?
+            //MainWindow.mw.CheckSudokuError();
         }
 
         //SomethingChanged check needed
@@ -87,9 +136,10 @@ namespace SudokuSolver
 
         public void Fix(int n)
         {
-            Fixed = true;
             grid.Background = Brushes.SandyBrown;
             setNum(n);
+            Solved = false;
+            Fixed = true;
             Possible.Clear();
             Possible.Add(n);
         }
@@ -105,20 +155,46 @@ namespace SudokuSolver
             lbl.Content = "";
             lbl.FontSize = 12;
             int cont = 0;
-            foreach (int item in Possible)
+            for (int i = 1; i < 10; i++)
             {
-                if (cont==3)
+                if (cont == 3)
                 {
                     lbl.Content += "\n";
                     cont = 0;
                 }
-                lbl.Content += item + "  ";
+                if (Possible.Contains(i))
+                {
+                    lbl.Content += i + "  ";
+                }
+                else
+                {
+                    lbl.Content += "   ";
+                }
                 cont++;
             }
         }
 
-        private void lbl_MouseDown(object sender, MouseButtonEventArgs e)
+        private void cell_MouseDown(object sender, MouseButtonEventArgs e)
         {//Click Event
+            if (this.Num != -1)
+            {//Si tiene un nº
+                foreach (Cell cell in MainWindow.cellsArray)
+                {
+                    if (cell.Possible.Contains(Num))
+                        cell.Marked = true;
+                    else
+                        cell.Marked = false;
+                    cell.SelectionChanged();
+                }
+            }
+            else
+            {
+                foreach (Cell cell in MainWindow.cellsArray)
+                {
+                    cell.Marked = false;
+                    cell.SelectionChanged();
+                }
+            }
             //Deselect other cells
             MainWindow.Unselect();
             //Select this cell

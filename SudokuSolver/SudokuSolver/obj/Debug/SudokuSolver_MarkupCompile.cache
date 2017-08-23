@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Users\ismaelci\Documents\GitHub\SudokuSolver-WPF\SudokuSolver\SudokuSolver\App.xaml
-2-1672372086
+41799181947
 
-7208506931
+10-383734188
 13738642453
-Cell.xaml;MainWindow.xaml;
+Box.xaml;Cell.xaml;MainWindow.xaml;Sudoku.xaml;
 
 False
 
