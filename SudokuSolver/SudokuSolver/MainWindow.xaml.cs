@@ -293,7 +293,7 @@ namespace SudokuSolver
                     }
                     else
                     {
-                        c.Possible = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+                        //c.Possible = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
                     }
                 }
                 //TODO: Comprobar que el Sudoku es válido
@@ -633,7 +633,7 @@ namespace SudokuSolver
             cellsArray[8, 8].Fix(9);*/
             #endregion
             #region Hard
-            cellsArray[0, 1].Fix(1);
+            /*cellsArray[0, 1].Fix(1);
             cellsArray[0, 2].Fix(4);
             cellsArray[0, 6].Fix(2);
             cellsArray[0, 8].Fix(7);
@@ -659,8 +659,55 @@ namespace SudokuSolver
             cellsArray[7, 2].Fix(5);
             cellsArray[7, 5].Fix(8);
             cellsArray[7, 7].Fix(3);
-            cellsArray[8, 1].Fix(6);
-#endregion
+            cellsArray[8, 1].Fix(6);//*/
+            #endregion
+            #region VeryHard
+            /*cellsArray[0, 2].Fix(5);
+            cellsArray[0, 7].Fix(8);
+            cellsArray[0, 8].Fix(3);
+            cellsArray[1, 0].Fix(4);
+            cellsArray[1, 3].Fix(3);
+            cellsArray[1, 4].Fix(9);
+            cellsArray[2, 1].Fix(6);
+            cellsArray[2, 3].Fix(4);
+            cellsArray[2, 6].Fix(1);
+            cellsArray[3, 4].Fix(7);
+            cellsArray[3, 7].Fix(5);
+            //cellsArray[3, 8].Fix(9);
+            cellsArray[4, 0].Fix(3);
+            cellsArray[4, 3].Fix(1);
+            cellsArray[4, 8].Fix(2);
+            cellsArray[5, 1].Fix(2);
+            cellsArray[5, 2].Fix(9);
+            cellsArray[5, 8].Fix(7);
+            cellsArray[6, 5].Fix(6);
+            cellsArray[7, 0].Fix(6);
+            cellsArray[7, 1].Fix(8);
+            cellsArray[8, 2].Fix(7);
+            cellsArray[8, 3].Fix(9);
+            cellsArray[8, 4].Fix(4);
+            cellsArray[8, 6].Fix(2);//*/
+            #endregion
+            #region Extremo
+            cellsArray[0, 0].Fix(4);
+            cellsArray[0, 2].Fix(3);
+            cellsArray[0, 3].Fix(5);
+            cellsArray[0, 7].Fix(2);
+            cellsArray[1, 4].Fix(6);
+            cellsArray[1, 5].Fix(1);
+            cellsArray[2, 0].Fix(7);
+            cellsArray[3, 4].Fix(8);
+            cellsArray[3, 5].Fix(9);
+            cellsArray[3, 6].Fix(5);
+            cellsArray[4, 3].Fix(3);
+            cellsArray[4, 6].Fix(8);
+            cellsArray[5, 0].Fix(2);
+            cellsArray[6, 3].Fix(4);
+            cellsArray[6, 7].Fix(7);
+            cellsArray[7, 1].Fix(9);
+            cellsArray[7, 6].Fix(6);
+            cellsArray[8, 1].Fix(1);//*/
+            #endregion
         }
 
         private void buttSave_Click(object sender, RoutedEventArgs e)
