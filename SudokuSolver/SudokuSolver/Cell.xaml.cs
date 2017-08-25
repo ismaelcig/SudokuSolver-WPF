@@ -114,6 +114,7 @@ namespace SudokuSolver
             Possible.Clear();
             Possible.Add(n);
             //TODO: Check needed here?
+            //If it finds an error here, it should stop solving, bc something's wrong
             //MainWindow.mw.CheckSudokuError();
         }
 

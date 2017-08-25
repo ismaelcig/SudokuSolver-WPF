@@ -11,10 +11,10 @@
 
         <Button x:Name="buttSolve" Content="SOLVE THIS" FontSize="25" FontWeight="Bold" HorizontalAlignment="Left" Margin="30,509,0,0" VerticalAlignment="Top" Width="149" Click="buttSolve_Click" Height="50"/>
         <Button x:Name="buttClean" Content="Clean" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Top" Width="45" Click="buttClean_Click"/>
-        <Button x:Name="buttFill" Content="Fill" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top" Width="27" Click="button_Click"/>
-        <Button x:Name="buttSave" Content="Save State" HorizontalAlignment="Left" Margin="264,509,0,0" VerticalAlignment="Top" Width="75" Height="22" Click="buttSave_Click"/>
-        <ComboBox x:Name="stateComboBox" HorizontalAlignment="Left" Margin="344,537,0,0" VerticalAlignment="Top" Width="144" SelectionChanged="stateComboBox_SelectionChanged"/>
-        <TextBox x:Name="txtState" HorizontalAlignment="Left" Height="23" Margin="344,508,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="144" MouseDown="txtState_MouseDown"/>
+        <Button x:Name="buttFill" Content="Fill" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top" Width="27" Click="buttFill_Click"/>
+        <Button x:Name="buttSave" IsEnabled="False" Content="Save State" HorizontalAlignment="Left" Margin="264,509,0,0" VerticalAlignment="Top" Width="75" Height="22" Click="buttSave_Click"/>
+        <ComboBox x:Name="stateComboBox" IsEnabled="False" HorizontalAlignment="Left" Margin="344,537,0,0" VerticalAlignment="Top" Width="144" SelectionChanged="stateComboBox_SelectionChanged"/>
+        <TextBox x:Name="txtState" IsEnabled="False" HorizontalAlignment="Left" Height="23" Margin="344,508,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="144" MouseDown="txtState_MouseDown"/>
         <Button x:Name="buttUnfix" Content="Unfix" HorizontalAlignment="Left" Margin="428,0,0,0" VerticalAlignment="Top" Width="39" Click="buttUnfix_Click"/>
 
     </Grid>
