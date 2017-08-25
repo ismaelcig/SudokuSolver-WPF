@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SudokuSolver
+namespace SudokuSolver.Objects
 {
     public class AuxObj
     {//Este objeto auxiliar se utiliza para comprobar cuando un nº aparece como posible en un único lugar

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SudokuSolver.Objects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -615,6 +616,7 @@ namespace SudokuSolver
         void CheckCase3()
         {//TODO: Call it with another name, finish it
             #region Boxes
+
             /*foreach (Box box in boxes)
             {
                 //Descartes = new HashSet<int>();
@@ -634,7 +636,7 @@ namespace SudokuSolver
                 {
                     Group.Add(cellsArray[i, j]);
                 }
-                Case3();
+                Case3("Row");
             }
             #endregion
             #region Cols
@@ -645,7 +647,7 @@ namespace SudokuSolver
                 {
                     Group.Add(cellsArray[i, j]);
                 }
-                Case3();
+                Case3("Col");
             }
             #endregion
         }
@@ -678,11 +680,17 @@ namespace SudokuSolver
             return null;//If everything is ok, this shouldn't be reached
         }
 
-        void Case3()
+        void Case3(string origen)//TODO: Delete if unused
         {
             Cell[] subgr1 = new Cell[3] { Group[0], Group[1], Group[2] };
             Cell[] subgr2 = new Cell[3] { Group[3], Group[4], Group[5] };
             Cell[] subgr3 = new Cell[3] { Group[6], Group[7], Group[8] };
+            if (origen == "Box")
+            {
+                Cell[] subgr4 = new Cell[3] { Group[0], Group[3], Group[6] };
+                Cell[] subgr5 = new Cell[3] { Group[1], Group[4], Group[7] };
+                Cell[] subgr6 = new Cell[3] { Group[2], Group[5], Group[8] };
+            }
             //Revisa que nums pueden aparecer en cada subgrupo
             auxObjList = new List<AuxObj>();
             LoadAuxObjList(subgr1);
