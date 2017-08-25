@@ -40,8 +40,8 @@ namespace SudokuSolver
             lbl.Content = "";
             Num = -1;
             Unfix();
-            Possible = new List<int>();
-            //Possible = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            //Possible = new List<int>();
+            Possible = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
             selected = false;
         }
 
@@ -168,7 +168,7 @@ namespace SudokuSolver
                 }
                 else
                 {
-                    lbl.Content += "   ";
+                    lbl.Content += "    ";
                 }
                 cont++;
             }
