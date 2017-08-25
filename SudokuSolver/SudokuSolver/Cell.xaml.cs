@@ -168,7 +168,7 @@ namespace SudokuSolver
                 }
                 else
                 {
-                    lbl.Content += "   ";
+                    lbl.Content += "    ";
                 }
                 cont++;
             }
