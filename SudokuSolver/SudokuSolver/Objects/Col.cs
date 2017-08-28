@@ -17,6 +17,7 @@ namespace SudokuSolver.Objects
 
         public Col(Cell cell)//Finds the col where "cell" belongs to, and saves it in Cells
         {
+            Cells = new Cell[9];
             int cNum = -1;
             for (int r = 0; r < 9; r++)
             {
