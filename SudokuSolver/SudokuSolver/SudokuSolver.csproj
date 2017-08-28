@@ -54,6 +54,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Objects\Col.cs" />
+    <Compile Include="Objects\Row.cs" />
     <Compile Include="State.cs" />
     <Compile Include="Sudoku.xaml.cs">
       <DependentUpon>Sudoku.xaml</DependentUpon>
@@ -74,7 +76,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="AuxObj.cs" />
+    <Compile Include="Objects\AuxObj.cs" />
     <Compile Include="Box.xaml.cs">
       <DependentUpon>Box.xaml</DependentUpon>
     </Compile>

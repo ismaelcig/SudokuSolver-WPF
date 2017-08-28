@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SudokuSolver.Objects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,6 +22,7 @@ namespace SudokuSolver
     /// </summary>
     public partial class MainWindow : Window
     {
+        #region Declarations
         public static MainWindow mw;
         //public static List<Cell> cells;//List containing all the cells
         public static Cell[,] cellsArray;//Array containing all the cells in position
@@ -59,10 +61,13 @@ namespace SudokuSolver
         int tries = 3;
         List<Cell> Group;//It can be a Row/Col/Box
 
+        string loadAuxObjIn = "";
+        #endregion
         /*************************************************************************************************************************************************/
         public MainWindow()
         {
             InitializeComponent();
+            #region Initializations
             //Save every cell
             cellsArray = new Cell[9, 9];
             auxArray = new Cell[9, 9];
@@ -173,6 +178,7 @@ namespace SudokuSolver
             stateComboBox.DisplayMemberPath = "Name";
             ResetSudoku();
             mw = this;
+            #endregion
         }
 #region Delegates
         void UpdateCellNumber()
@@ -212,7 +218,7 @@ namespace SudokuSolver
             {
                 foreach (Cell cell in box.array)
                 {
-                    LoadAuxObjList(cell);
+                    LoadAuxObjList(cell, null);
                 }
                 CheckAuxObjList();
             }
@@ -226,7 +232,7 @@ namespace SudokuSolver
             }
         }
         #endregion
-
+#region
         void ResetSudoku()
         {
             Descartes = new HashSet<int>();
@@ -277,7 +283,7 @@ namespace SudokuSolver
                 }
             }
         }
-        
+#endregion
         private void buttSolve_Click(object sender, RoutedEventArgs e)
         {
             CheckSudokuError();
@@ -296,8 +302,6 @@ namespace SudokuSolver
                         //c.Possible = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
                     }
                 }
-                //TODO: Comprobar que el Sudoku es válido
-
                 t = new Thread(Solve);
                 t.Start();
                 //Mientras no lo haya resuelto, intenta llegar a una solución
@@ -314,7 +318,7 @@ namespace SudokuSolver
         //                                          MAIN METHODS                                              //
         /******************************************************************************************************/
         void Solve()
-        {
+        {//THE METHOD THAT SOLVES THE SUDOKU
             tries = 3;
             bool solved = false;
             while (!solved)
@@ -332,7 +336,7 @@ namespace SudokuSolver
                 {
                     for (int j = 0; j < 9; j++)
                     {
-                        LoadAuxObjList(cellsArray[i, j]);
+                        LoadAuxObjList(cellsArray[i, j], null);
                     }
                     CheckAuxObjList();
                 }
@@ -341,12 +345,16 @@ namespace SudokuSolver
                 {
                     for (int j = 0; j < 9; j++)
                     {
-                        LoadAuxObjList(cellsArray[j, i]);
+                        LoadAuxObjList(cellsArray[j, i], null);
                     }
                     CheckAuxObjList();
                 }
                 //}
                 #endregion
+                CheckCase3();
+
+
+                //Comprobación
                 int unsolvedCells = 81;
                 foreach (Cell cell in cellsArray)
                 {
@@ -359,7 +367,7 @@ namespace SudokuSolver
                 {
                     tries--;
                     if (tries == 0)
-                        solved = true;
+                        solved = true;//TODO: Don't call that "solved"
                     //var result = MessageBox.Show("Keep finding solution?", "" + unsolvedCells + " unsolved cells", MessageBoxButton.YesNo);
                     //if (result == MessageBoxResult.No)
                     //{
@@ -476,34 +484,56 @@ namespace SudokuSolver
             Dispatcher.Invoke(ui);
         }
 
-        void LoadAuxObjList(Cell c)
+        void LoadAuxObjList(Cell c, Cell[] subgr)
         {
             selectedCell = c;
             Dispatcher.Invoke(id);
             if (!selectedCell.Fixed && !selectedCell.Solved)
             {
                 foreach (int n in selectedCell.Possible)
-                {
+                {//TODO: CONTINUE
                     if (auxObjList.Where(z => z.Num == n).Count() == 0)
                     {//Si no existe ningún objeto en la lista con este nº, lo crea
-                        auxObjList.Add(new AuxObj(n, selectedCell));
+                        if (subgr == null)//Si no le paso un subgrupo, significa que viene de CheckPossibles
+                            auxObjList.Add(new AuxObj(n, selectedCell));//Guarda en el objeto la celda
+                        else//Significa que viene de CheckCase3
+                            auxObjList.Add(new AuxObj(n, subgr));//Guarda en el objeto el subgrupo
                         somethingChanged = true;
                         contChanges++;
                     }
                     else
                     {//Si ya existe, +1Rep
-                        auxObjList.Single(z => z.Num == n).Reps++;
+                        if (subgr == null || auxObjList.Single(z => z.Num == n).Subgr != subgr)
+                            auxObjList.Single(z => z.Num == n).Reps++;
+                        //Esto es una simplificación de:
+                        /*
+                        if (subgr == null)
+                            auxObjList.Single(z => z.Num == n).Reps++;
+                        else
+                        //Un nº puede aparecer varias veces en el mismo subgr, sólo me interesa saber si aparece en varios subgr
+                            if (auxObjList.Single(z => z.Num == n).Subgr != subgr)
+                                auxObjList.Single(z => z.Num == n).Reps++;
+                        */
                     }
                 }
             }
             Dispatcher.Invoke(id);
+        }
+        //Este método se usa en CheckCase3
+        void LoadAuxObjList(Cell[] subgr)
+        {
+            foreach (Cell cell in subgr)
+            {
+                LoadAuxObjList(cell, subgr);
+            }
+
         }
 
         void CheckAuxObjList()
         {//Cuando acaba de recorrer una Row/Col/Box
             foreach (AuxObj aobj in auxObjList)
             {
-                if (aobj.Reps == 1)
+                if (aobj.Reps == 1 && aobj.Cell != null)
                 {//Significa que aobj.Num sólo puede ir en aobj.Cell
                     aux = aobj.Num;
                     selectedCell = aobj.Cell;
@@ -580,7 +610,158 @@ namespace SudokuSolver
             Dispatcher.Invoke(sc);//Selection Changed for every cell
         }
 
+        void CheckCase3()
+        {//TODO: Call it with another name, finish it
+            #region Boxes
+            foreach (Box box in boxes)
+            {
+                Group = new List<Cell>();
+                for (int r = 0; r < 3; r++)
+                {
+                    for (int c = 0; c < 3; c++)
+                    {
+                        Group.Add(box.array[r, c]);
+                    }
+                }
+                Case3("Box");
+            }
+            #endregion
+            #region Rows
+            for (int i = 0; i < 9; i++)
+            {
+                Group = new List<Cell>();//Fill the group with the cells we want
+                for (int j = 0; j < 9; j++)
+                {
+                    Group.Add(cellsArray[i, j]);
+                }
+                Case3("Row");
+            }
+            #endregion
+            #region Cols
+            for (int j = 0; j < 9; j++)
+            {
+                Group = new List<Cell>();//Fill the group with the cells we want
+                for (int i = 0; i < 9; i++)
+                {
+                    Group.Add(cellsArray[i, j]);
+                }
+                Case3("Col");
+            }
+            #endregion
+        }
 
+        //Descarta el nº "n" de toda la Box menos las celdas del subgr
+        void Descartar(int n, Cell[] subgr, string origen)
+        {
+            if (origen == "Row" || origen == "Col")
+            {
+                foreach (Cell cell in FindBox(subgr[0]).array)
+                {
+                    if (!subgr.Contains(cell))
+                    {//If that cell isn't in the subgr, discard "n"
+                        cell.Possible.Remove(n);
+                    }
+                    selectedCell = cell;
+                    Dispatcher.Invoke(ui);
+                }
+            }
+            else if (origen == "Box")
+            {//Comprueba si debe descartar en horizontal/vertical, y luego descarta "n" en todas las celdas de la Row/Col
+             //que no estén en subgr
+             //1º Compruebo si debo descartar en horizontal
+                List<Cell> AuxGroup = new List<Cell>();
+                Row row = new Row(subgr[0]);
+                if (row.Cells.Contains(subgr[1]))
+                {//Debo descartar en horizontal
+                    foreach (Cell cell in row.Cells)
+                    {
+                        AuxGroup.Add(cell);
+                    }
+                }
+                else
+                {//Debo descartar en vertical
+                    Col col = new Col(subgr[0]);
+                    foreach (Cell cell in col.Cells)
+                    {
+                        AuxGroup.Add(cell);
+                    }
+                }
+                //2º Descarto "n" en todas las celdas de Group excepto las que están en subgr
+                foreach (Cell cell in AuxGroup)
+                {
+                    if (!subgr.Contains(cell))
+                    {
+                        cell.Possible.Remove(n);
+                    }
+                    selectedCell = cell;
+                    Dispatcher.Invoke(ui);
+                }
+            }
+        }
+
+        //Find the box that contains a Cell
+        Box FindBox(Cell cell)
+        {
+            foreach (Box box in boxes)
+            {
+                foreach (Cell boxCell in box.array)
+                {
+                    if (boxCell == cell)
+                    {//When the Box that contains the cell is found, return the box
+                        return box;
+                    }
+                }
+            }
+            return null;//If everything is ok, this shouldn't be reached
+        }
+
+        void Case3(string origen)//TODO: Delete if unused
+        {
+            Cell[] subgr1 = new Cell[3] { Group[0], Group[1], Group[2] };
+            Cell[] subgr2 = new Cell[3] { Group[3], Group[4], Group[5] };
+            Cell[] subgr3 = new Cell[3] { Group[6], Group[7], Group[8] };
+            //Revisa que nums pueden aparecer en cada subgrupo
+            auxObjList = new List<AuxObj>();
+            LoadAuxObjList(subgr1);
+            LoadAuxObjList(subgr2);
+            LoadAuxObjList(subgr3);
+            //Ahora está la lista AuxObjList cargada con AuxObj que guardan el subgr al que pertenece el nº
+            //Si algún nº sólo puede ir en un subgrupo(Si su auxObj.Reps == 1)
+            if (origen == "Row" || origen == "Col")
+            {
+                foreach (AuxObj ao in auxObjList)
+                {
+                    if (ao.Reps == 1)
+                    {//Es un nº que obligatoriamente tiene que estar en ao.Subgr, debe ser descartado en el resto de celdas de su Box
+                        Descartar(ao.Num, ao.Subgr, origen);
+                    }
+                }
+            }
+            else if (origen == "Box")
+            {
+                foreach (AuxObj ao in auxObjList)
+                {
+                    if (ao.Reps == 1)
+                    {
+                        Descartar(ao.Num, ao.Subgr, origen);
+                    }
+                }
+                Cell[] subgr4 = new Cell[3] { Group[0], Group[3], Group[6] };
+                Cell[] subgr5 = new Cell[3] { Group[1], Group[4], Group[7] };
+                Cell[] subgr6 = new Cell[3] { Group[2], Group[5], Group[8] };
+                LoadAuxObjList(subgr4);
+                LoadAuxObjList(subgr5);
+                LoadAuxObjList(subgr6);
+                foreach (AuxObj ao in auxObjList)
+                {
+                    if (ao.Reps == 1)
+                    {
+                        Descartar(ao.Num, ao.Subgr, origen);
+                    }
+                }
+            }
+            
+        }
 
         /******************************************************************************************************/
         //                                      MAIN METHODS END                                              //
@@ -599,7 +780,7 @@ namespace SudokuSolver
             Application.Current.Shutdown();
         }
 
-        private void button_Click(object sender, RoutedEventArgs e)
+        private void buttFill_Click(object sender, RoutedEventArgs e)
         {//Fills with a Sudoku example
             #region Easy-Normal
             /*cellsArray[0, 0].Fix(5);
@@ -662,7 +843,7 @@ namespace SudokuSolver
             cellsArray[8, 1].Fix(6);//*/
             #endregion
             #region VeryHard
-            /*cellsArray[0, 2].Fix(5);
+            cellsArray[0, 2].Fix(5);
             cellsArray[0, 7].Fix(8);
             cellsArray[0, 8].Fix(3);
             cellsArray[1, 0].Fix(4);
@@ -689,7 +870,7 @@ namespace SudokuSolver
             cellsArray[8, 6].Fix(2);//*/
             #endregion
             #region Extremo
-            cellsArray[0, 0].Fix(4);
+            /*cellsArray[0, 0].Fix(4);
             cellsArray[0, 2].Fix(3);
             cellsArray[0, 3].Fix(5);
             cellsArray[0, 7].Fix(2);
