@@ -36,7 +36,7 @@ namespace SudokuSolver
         Thread t;
         delegate void UpdateInterface();
         UpdateInterface ui;
-        int aux = -1;
+        //int aux = -1;
         bool somethingChanged = false;
 
         List<AuxObj> auxObjList = new List<AuxObj>();
@@ -61,7 +61,7 @@ namespace SudokuSolver
         int tries = 3;
         List<Cell> Group;//It can be a Row/Col/Box
 
-        string loadAuxObjIn = "";
+        int errortab = 0;
         #endregion
         /*************************************************************************************************************************************************/
         public MainWindow()
@@ -183,12 +183,12 @@ namespace SudokuSolver
 #region Delegates
         void UpdateCellNumber()
         {
-            if (aux > 0)
+            if (selectedCell.Possible.Count == 1)
             {//Si hay que actualizar el nº de la celda
-                selectedCell.setNum(aux);
-                //selectedCell.grid.Background = Brushes.Thistle;
+                selectedCell.setNum(selectedCell.Possible[0]);
                 selectedCell.Solved = true;
-                aux = -1;
+                contChanges++;//TODO: revisar que no de error
+                //aux = -1;
             }
             else if (!selectedCell.Fixed && !selectedCell.Solved)
             {
@@ -216,6 +216,8 @@ namespace SudokuSolver
         {
             foreach (Box box in Sudoku.SudokuGrid.Children)
             {
+                if (error)
+                    break;
                 foreach (Cell cell in box.array)
                 {
                     LoadAuxObjList(cell, null);
@@ -272,7 +274,10 @@ namespace SudokuSolver
                     if (keyVal >= (int)Key.D0 && keyVal <= (int)Key.D9)
                     {//Si pulsa un nº en el teclado superior, lo borra como posibilidad
                         value = (int)e.Key - (int)Key.D0;
-                        selectedCell.Possible.Remove(value);
+                        if (selectedCell.Possible.Contains(value))
+                            selectedCell.Possible.Remove(value);
+                        else
+                            selectedCell.Possible.Add(value);
                         //Solve();
                     }
                     else if (keyVal >= (int)Key.NumPad0 && keyVal <= (int)Key.NumPad9)
@@ -319,11 +324,17 @@ namespace SudokuSolver
         /******************************************************************************************************/
         void Solve()
         {//THE METHOD THAT SOLVES THE SUDOKU
+            for (int i = 0; i < errortab; i++)
+            {
+                Console.Write("    ");
+            }
+            Console.WriteLine("Entrando en Solve()");
+            errortab++;
             tries = 3;
             bool solved = false;
-            while (!solved)
+            while (!solved && !error)
             {
-                Descartar();
+                Discard();
                 #region CheckPossibles
                 //if (contChanges == 0)
                 //{
@@ -352,8 +363,6 @@ namespace SudokuSolver
                 //}
                 #endregion
                 CheckCase3();
-
-
                 //Comprobación
                 int unsolvedCells = 81;
                 foreach (Cell cell in cellsArray)
@@ -367,7 +376,8 @@ namespace SudokuSolver
                 {
                     tries--;
                     if (tries == 0)
-                        solved = true;//TODO: Don't call that "solved"
+                        //solved = true;//TODO: Don't call that "solved"
+                        break;
                     //var result = MessageBox.Show("Keep finding solution?", "" + unsolvedCells + " unsolved cells", MessageBoxButton.YesNo);
                     //if (result == MessageBoxResult.No)
                     //{
@@ -381,16 +391,30 @@ namespace SudokuSolver
                 }
 
             }
+            errortab--;
+            for (int i = 0; i < errortab; i++)
+            {
+                Console.Write("    ");
+            }
+            Console.WriteLine("Saliendo de Solve()");
         }
 
-        void Descartar()
+        void Discard()
         {//Intenta descartar nº hasta que sólo quede uno en cada celda -> Orden: Box, Row, Col
-            while (contChanges != 0)
+            for (int i = 0; i < errortab; i++)
+            {
+                Console.Write("    ");
+            }
+            Console.WriteLine("Entrando en Discard()");
+            errortab++;
+            while (contChanges != 0 && !error)
             {
                 contChanges = 0;//Para saber cuando el programa ya no es capaz de descartar más nº posibles
                 #region Boxes
                 foreach (Box box in boxes)
                 {
+                    if (error)
+                        break;
                     //Descartes = new HashSet<int>();
                     Group = new List<Cell>();//Fill the group with the cells we want
                     foreach (Cell cell in box.array)
@@ -403,6 +427,8 @@ namespace SudokuSolver
                 #region Rows
                 for (int i = 0; i < 9; i++)
                 {
+                    if (error)
+                        break;
                     Group = new List<Cell>();//Fill the group with the cells we want
                     for (int j = 0; j < 9; j++)
                     {
@@ -414,6 +440,8 @@ namespace SudokuSolver
                 #region Cols
                 for (int j = 0; j < 9; j++)
                 {
+                    if (error)
+                        break;
                     Group = new List<Cell>();//Fill the group with the cells we want
                     for (int i = 0; i < 9; i++)
                     {
@@ -423,11 +451,22 @@ namespace SudokuSolver
                 }
                 #endregion
             }
-
+            errortab--;
+            for (int i = 0; i < errortab; i++)
+            {
+                Console.Write("    ");
+            }
+            Console.WriteLine("Saliendo de Discard()");
         }
 
         void CheckGroup()
         {
+            for (int i = 0; i < errortab; i++)
+            {
+                Console.Write("    ");
+            }
+            Console.WriteLine("Entrando en CheckGroup()");
+            errortab++;
             Descartes = new HashSet<int>();
             do
             {
@@ -435,14 +474,56 @@ namespace SudokuSolver
                 foreach (Cell cell in Group)//For each cell
                 {
                     CheckCell(cell);
+                    if (error)
+                        break;
                 }
-            } while (somethingChanged);
+            } while (somethingChanged && !error);
+            errortab--;
+            for (int i = 0; i < errortab; i++)
+            {
+                Console.Write("    ");
+            }
+            Console.WriteLine("Saliendo de CheckGroup()");
         }
 
         void CheckCell(Cell c)
         {
+            for (int i = 0; i < errortab; i++)
+            {
+                Console.Write("    ");
+            }
+            Console.WriteLine("Entrando en CheckCell()");
+            errortab++;
             selectedCell = c;
-            Dispatcher.Invoke(ui);
+            //Dispatcher.Invoke(ui);
+
+            /***********************************************************/
+            if (selectedCell.Num > 0 && !Descartes.Contains(selectedCell.Num))
+            {//If the cell has a nº (Fixed or Solved) and it isn't in Descartes, add it
+                Descartes.Add(selectedCell.Num);
+                somethingChanged = true;
+            }
+            else
+            {//The number has to be found
+                foreach (int n in Descartes)
+                {//Quita los descartes de la lista de posibilidades
+                    if (selectedCell.Possible.Contains(n))
+                    {
+                        selectedCell.Possible.Remove(n);
+                        somethingChanged = true;
+                        contChanges++;
+                    }
+                }
+                //if (selectedCell.Possible.Count == 1)
+                //{
+                //    aux = selectedCell.Possible[0];
+                //    somethingChanged = true;
+                //    contChanges++;
+                //}
+            }
+            /***********************************************************/
+
+            /*
             if (selectedCell.Fixed || selectedCell.Solved)
             {//Una celda fija o que ya tiene un nº
                 if (!Descartes.Contains(selectedCell.Num))
@@ -480,18 +561,30 @@ namespace SudokuSolver
                         contChanges++;
                     }
                 }
-            }
+            }*/
             Dispatcher.Invoke(ui);
+            errortab--;
+            for (int i = 0; i < errortab; i++)
+            {
+                Console.Write("    ");
+            }
+            Console.WriteLine("Saliendo de CheckCell()");
         }
 
         void LoadAuxObjList(Cell c, Cell[] subgr)
         {
+            for (int i = 0; i < errortab; i++)
+            {
+                Console.Write("    ");
+            }
+            Console.WriteLine("Entrando en LoadAuxObjList(Cell, Cell[])");
+            errortab++;
             selectedCell = c;
-            Dispatcher.Invoke(id);
+            //Dispatcher.Invoke(id);
             if (!selectedCell.Fixed && !selectedCell.Solved)
             {
                 foreach (int n in selectedCell.Possible)
-                {//TODO: CONTINUE
+                {
                     if (auxObjList.Where(z => z.Num == n).Count() == 0)
                     {//Si no existe ningún objeto en la lista con este nº, lo crea
                         if (subgr == null)//Si no le paso un subgrupo, significa que viene de CheckPossibles
@@ -517,37 +610,79 @@ namespace SudokuSolver
                     }
                 }
             }
-            Dispatcher.Invoke(id);
+            //Dispatcher.Invoke(id);
+            Dispatcher.Invoke(ui);
+            errortab--;
+            for (int i = 0; i < errortab; i++)
+            {
+                Console.Write("    ");
+            }
+            Console.WriteLine("Saliendo de LoadAuxObjList(Cell, Cell[])");
         }
         //Este método se usa en CheckCase3
         void LoadAuxObjList(Cell[] subgr)
         {
+            for (int i = 0; i < errortab; i++)
+            {
+                Console.Write("    ");
+            }
+            Console.WriteLine("Entrando en LoadAuxObjList(Cell[])");
+            errortab++;
             foreach (Cell cell in subgr)
             {
                 LoadAuxObjList(cell, subgr);
             }
-
+            errortab--;
+            for (int i = 0; i < errortab; i++)
+            {
+                Console.Write("    ");
+            }
+            Console.WriteLine("Saliendo de LoadAuxObjList(Cell[])");
         }
 
         void CheckAuxObjList()
         {//Cuando acaba de recorrer una Row/Col/Box
+            for (int i = 0; i < errortab; i++)
+            {
+                Console.Write("    ");
+            }
+            Console.WriteLine("Entrando en CheckAuxObjList()");
+            errortab++;
             foreach (AuxObj aobj in auxObjList)
             {
+                if (error)
+                    break;
                 if (aobj.Reps == 1 && aobj.Cell != null)
                 {//Significa que aobj.Num sólo puede ir en aobj.Cell
-                    aux = aobj.Num;
                     selectedCell = aobj.Cell;
+                    foreach (int n in selectedCell.Possible)
+                    {
+                        if (n != aobj.Num)
+                            selectedCell.Possible.Remove(n);
+                    }
                     //somethingChanged = true;
                     Dispatcher.Invoke(ui);
                     //Cuando descubre algún número, debería mirar qué cosas puede descartar
-                    Descartar();
+                    Discard();
                 }
             }
             auxObjList = new List<AuxObj>();
+            errortab--;
+            for (int i = 0; i < errortab; i++)
+            {
+                Console.Write("    ");
+            }
+            Console.WriteLine("Saliendo de CheckAuxObjList()");
         }
 
         public void CheckSudokuError()
         {//This method will Check if the Sudoku is correct
+            for (int i = 0; i < errortab; i++)
+            {
+                Console.Write("    ");
+            }
+            Console.WriteLine("Entrando en CheckSudokuError()");
+            errortab++;
             error = false;
             foreach (Cell cell in cellsArray)
             {
@@ -588,11 +723,25 @@ namespace SudokuSolver
                 CheckGroupError();
             }
             #endregion
-
+            if (error)
+                if (t.IsAlive)
+                    t.Abort();
+            errortab--;
+            for (int i = 0; i < errortab; i++)
+            {
+                Console.Write("    ");
+            }
+            Console.WriteLine("Saliendo de CheckSudokuError()");
         }
 
         void CheckGroupError()
         {
+            for (int i = 0; i < errortab; i++)
+            {
+                Console.Write("    ");
+            }
+            Console.WriteLine("Entrando en CheckGroupError()");
+            errortab++;
             //Check for repeated cells
             for (int i = 0; i < 9; i++)
             {
@@ -604,14 +753,29 @@ namespace SudokuSolver
                         Group[i].Error = true;
                         Group[j].Error = true;
                         error = true;
+                        Console.WriteLine("");
+                        Console.WriteLine("ERROR = TRUE;");
+                        Console.WriteLine("");
                     }
                 }
             }
             Dispatcher.Invoke(sc);//Selection Changed for every cell
+            errortab--;
+            for (int i = 0; i < errortab; i++)
+            {
+                Console.Write("    ");
+            }
+            Console.WriteLine("Saliendo de CheckGroupError()");
         }
 
         void CheckCase3()
-        {//TODO: Call it with another name, finish it
+        {
+            for (int i = 0; i < errortab; i++)
+            {
+                Console.Write("    ");
+            }
+            Console.WriteLine("Entrando en CheckCase3()");
+            errortab++;
             #region Boxes
             foreach (Box box in boxes)
             {
@@ -648,11 +812,23 @@ namespace SudokuSolver
                 Case3("Col");
             }
             #endregion
+            errortab--;
+            for (int i = 0; i < errortab; i++)
+            {
+                Console.Write("    ");
+            }
+            Console.WriteLine("Saliendo de CheckCase3()");
         }
 
         //Descarta el nº "n" de toda la Box menos las celdas del subgr
-        void Descartar(int n, Cell[] subgr, string origen)
+        void Discard(int n, Cell[] subgr, string origen)
         {
+            for (int i = 0; i < errortab; i++)
+            {
+                Console.Write("    ");
+            }
+            Console.WriteLine("Entrando en Discard(int, Cell[], string)");
+            errortab++;
             if (origen == "Row" || origen == "Col")
             {
                 foreach (Cell cell in FindBox(subgr[0]).array)
@@ -697,26 +873,51 @@ namespace SudokuSolver
                     Dispatcher.Invoke(ui);
                 }
             }
+            errortab--;
+            for (int i = 0; i < errortab; i++)
+            {
+                Console.Write("    ");
+            }
+            Console.WriteLine("Saliendo de Discard(int, Cell[], string)");
         }
 
         //Find the box that contains a Cell
         Box FindBox(Cell cell)
         {
+            for (int i = 0; i < errortab; i++)
+            {
+                Console.Write("    ");
+            }
+            Console.WriteLine("Entrando en FindBox()");
+            errortab++;
             foreach (Box box in boxes)
             {
                 foreach (Cell boxCell in box.array)
                 {
                     if (boxCell == cell)
                     {//When the Box that contains the cell is found, return the box
+                        Console.WriteLine("Saliendo de FindBox() return Box");
                         return box;
                     }
                 }
             }
+            errortab--;
+            for (int i = 0; i < errortab; i++)
+            {
+                Console.Write("    ");
+            }
+            Console.WriteLine("Saliendo de FindBox() return null");
             return null;//If everything is ok, this shouldn't be reached
         }
 
-        void Case3(string origen)//TODO: Delete if unused
+        void Case3(string origen)
         {
+            for (int i = 0; i < errortab; i++)
+            {
+                Console.Write("    ");
+            }
+            Console.WriteLine("Entrando en Case3()");
+            errortab++;
             Cell[] subgr1 = new Cell[3] { Group[0], Group[1], Group[2] };
             Cell[] subgr2 = new Cell[3] { Group[3], Group[4], Group[5] };
             Cell[] subgr3 = new Cell[3] { Group[6], Group[7], Group[8] };
@@ -727,25 +928,16 @@ namespace SudokuSolver
             LoadAuxObjList(subgr3);
             //Ahora está la lista AuxObjList cargada con AuxObj que guardan el subgr al que pertenece el nº
             //Si algún nº sólo puede ir en un subgrupo(Si su auxObj.Reps == 1)
-            if (origen == "Row" || origen == "Col")
+            foreach (AuxObj ao in auxObjList)
             {
-                foreach (AuxObj ao in auxObjList)
-                {
-                    if (ao.Reps == 1)
-                    {//Es un nº que obligatoriamente tiene que estar en ao.Subgr, debe ser descartado en el resto de celdas de su Box
-                        Descartar(ao.Num, ao.Subgr, origen);
-                    }
+                if (ao.Reps == 1)
+                {//Es un nº que obligatoriamente tiene que estar en ao.Subgr, debe ser descartado en el resto de celdas de su Box
+                    Discard(ao.Num, ao.Subgr, origen);
                 }
             }
-            else if (origen == "Box")
-            {
-                foreach (AuxObj ao in auxObjList)
-                {
-                    if (ao.Reps == 1)
-                    {
-                        Descartar(ao.Num, ao.Subgr, origen);
-                    }
-                }
+
+            if (origen == "Box")
+            {//In this case, it needs to do  a bit more
                 Cell[] subgr4 = new Cell[3] { Group[0], Group[3], Group[6] };
                 Cell[] subgr5 = new Cell[3] { Group[1], Group[4], Group[7] };
                 Cell[] subgr6 = new Cell[3] { Group[2], Group[5], Group[8] };
@@ -756,11 +948,51 @@ namespace SudokuSolver
                 {
                     if (ao.Reps == 1)
                     {
-                        Descartar(ao.Num, ao.Subgr, origen);
+                        Discard(ao.Num, ao.Subgr, origen);
                     }
                 }
             }
-            
+            errortab--;
+            for (int i = 0; i < errortab; i++)
+            {
+                Console.Write("    ");
+            }
+            Console.WriteLine("Saliendo de Case3()");
+        }
+
+        void NakedSubset()
+        {
+            for (int i = 0; i < errortab; i++)
+            {
+                Console.Write("    ");
+            }
+            Console.WriteLine("Entrando en NakedSubset()");
+            errortab++;
+            //TODO: FINISH; Include this in CheckGroup() or when checking auxObjList
+            List<Cell> auxCellList2 = new List<Cell>();
+            List<Cell> auxCellList3 = new List<Cell>();
+            foreach (Cell cell in Group)
+            {
+                if (cell.Possible.Count == 2)
+                {
+                    auxCellList2.Add(cell);
+                }
+                else if (cell.Possible.Count == 3)
+                {
+                    auxCellList3.Add(cell);
+                }
+            }
+            if (auxCellList2.Count == 2)
+            {
+                auxCellList2[0].Possible.Equals(auxCellList2[1].Possible);
+                auxCellList2[0].grid.Background = Brushes.Red;
+            }
+            errortab--;
+            for (int i = 0; i < errortab; i++)
+            {
+                Console.Write("    ");
+            }
+            Console.WriteLine("Saliendo de NakedSubset()");
         }
 
         /******************************************************************************************************/
